@@ -8,6 +8,7 @@ public interface strings {
     String ARE_U_SURE_WANT_EXIT = "Вы действительно хотите выйти?";
     String DO_EXIT = "Выйти";
     String STAY = "Остаться";
+    String START = "НАЧАТЬ";
 
     //MAIN MENU
     String MAIN_MENU = "ГЛАВНОЕ МЕНЮ";
@@ -30,4 +31,17 @@ public interface strings {
 
     //GAME SETTINGS
     String GAME_PARAMS = "ПАРАМЕТРЫ ИГРЫ";
+    String PLAYER_1 = "ИГРОК 1";
+    String PLAYER_2 = "ИГРОК 2";
+    String NAME = "Имя: ";
+    String PLAYER_TYPE = "Тип игрока: ";
+    String COMPUTER = "Компьютер";
+    String HUMAN = "Человек";
+    String HARD = "Сложный";
+    String MEDIUM = "Средний";
+    String EASY = "Простой";
+    String DIFFICULT = "Сложность: ";
+
+    //GAME
+    String VS = " VS ";
 }

@@ -11,18 +11,23 @@ import java.awt.event.MouseEvent;
 public class styles {
     private static final int BIG_FONT_SIZE = 50;
     private static final int MEDIUM_FONT_SIZE = 25;
+    private static final int LIGHT_FONT_SIZE = 20;
 
-    private static void BoldFontStyle(JComponent component) {
+    public static void BigFontStyle(JComponent component) {
         component.setFont(new Font(Font.SANS_SERIF, Font.BOLD, BIG_FONT_SIZE));
     }
 
-    private static void MediumFontStyle(JComponent component) {
+    public static void MediumFontStyle(JComponent component) {
         component.setFont(new Font(Font.SANS_SERIF, Font.BOLD, MEDIUM_FONT_SIZE));
+    }
+
+    public static void LightFontStyle(JComponent component) {
+        component.setFont(new Font(Font.SERIF, Font.BOLD, LIGHT_FONT_SIZE));
     }
 
     public static void MenuButtonStyle(JLabel button) {
         TransparentComponentStyle(button);
-        BoldFontStyle(button);
+        BigFontStyle(button);
 
         button.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -41,13 +46,40 @@ public class styles {
         });
     }
 
+    public static void OrangeButtonStyle(JLabel button) {
+        BigFontStyle(button);
+        button.setHorizontalAlignment(SwingConstants.CENTER);
+        button.setForeground(colors.WHITE);
+        button.setBackground(colors.ORANGE);
+        button.setOpaque(true);
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                button.setBackground(colors.DARK_GRAY);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                button.setBackground(colors.ORANGE);
+            }
+        });
+    }
+
+    public static void LightTextStyle(JLabel label) {
+        LightFontStyle(label);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
     public static void TitleTextStyle(JLabel title) {
         MediumFontStyle(title);
         TransparentComponentStyle(title);
 
         title.setForeground(colors.GREYISH_BROWN);
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        setComponentMargins(title, dimen.TITLE_MARGINS);
+        setComponentMargins(title, constants.TITLE_MARGINS);
     }
 
     public static void TransparentComponentStyle(JComponent button) {
@@ -57,8 +89,12 @@ public class styles {
     }
 
     public static void setComponentMargins(JComponent component, int margins) {
+        setComponentMargins(component, margins, margins, margins, margins);
+    }
+
+    public static void setComponentMargins(JComponent component, int top, int left, int bottom, int right) {
         Border current = component.getBorder();
-        Border empty = new EmptyBorder(margins, margins, margins, margins);
+        Border empty = new EmptyBorder(top, left, bottom, right);
 
         if (current == null){
             component.setBorder(empty);

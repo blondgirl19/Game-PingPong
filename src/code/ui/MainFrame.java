@@ -5,8 +5,9 @@ import code.ui.main_menu.MainMenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
-import static resources.dimen.*;
+import static resources.constants.*;
 
 public class MainFrame extends JFrame {
     public MainFrame() {
@@ -14,22 +15,45 @@ public class MainFrame extends JFrame {
         initComponents();
     }
 
-    private void initComponents() {
-        add(new MainMenuPanel());
-    }
-
     public void initMainFrame() {
         Dimension dimension = new Dimension(MAIN_FRAME_WIDTH, MAIN_FRAME_HEIGHT);
         setSize(dimension);
         setMinimumSize(dimension);
         setTitle(strings.APP_TITLE);
-        //setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                //startMovingPlayers(e);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                //stopMovingPlayers(e);
+                System.out.println("alsdkfj");
+            }
+        });
+    }
+
+    private void initComponents() {
+        add(new MainMenuPanel());
     }
 
     public static void main(String[] args) {
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
     }
+
+    /*
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                e.getComponent().getWidth();
+                e.getComponent().getHeight();
+            }
+        });
+     */
 }

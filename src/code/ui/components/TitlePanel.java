@@ -1,7 +1,7 @@
 package code.ui.components;
 
 import resources.colors;
-import resources.dimen;
+import resources.constants;
 import resources.images;
 import resources.styles;
 
@@ -21,7 +21,7 @@ public class TitlePanel extends JPanel {
         initBackButton();
 
         JLabel shadowLabel = new JLabel();
-        styles.setComponentMargins(shadowLabel, dimen.SHADOW_MARGINS);
+        styles.setComponentMargins(shadowLabel, constants.SHADOW_MARGINS);
 
         shadowLabel.setBackground(colors.SHADOW);
         shadowLabel.setOpaque(true);

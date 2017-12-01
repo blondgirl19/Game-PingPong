@@ -14,6 +14,11 @@ public class MainMenuPanel extends BasePanel {
     private MouseAdapter clickAdapter;
 
     @Override
+    protected void providePresenter() {
+
+    }
+
+    @Override
     protected void fillTitle() {
         titlePanel.setTitle(strings.MAIN_MENU);
         titlePanel.setBackButtonVisible(false);

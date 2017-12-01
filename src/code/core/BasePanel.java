@@ -17,6 +17,7 @@ public abstract class BasePanel extends JPanel {
         setBackground(LATTE_BACKGROUND);
 
         initComponents();
+        providePresenter();
         fillTitle();
         fillScreenContent();
     }
@@ -27,9 +28,11 @@ public abstract class BasePanel extends JPanel {
 
         screenContentPanel = new JPanel();
         screenContentPanel.setOpaque(false);
+
         add(screenContentPanel, BorderLayout.CENTER);
     }
 
+    protected abstract void providePresenter();
     protected abstract void fillTitle();
     protected abstract void fillScreenContent();
 
