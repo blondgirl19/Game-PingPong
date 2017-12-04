@@ -10,4 +10,5 @@ public interface colors {
     Color TRANSPARENT = new Color(0xFFFFFF);
     Color GREYISH_BROWN = new Color(0x424242);
     Color SHADOW = new Color(0xCCCCCC);
+    Color GREEN = new Color(0x1AB431);
 }

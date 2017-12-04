@@ -22,19 +22,6 @@ public class MainFrame extends JFrame {
         setTitle(strings.APP_TITLE);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                //startMovingPlayers(e);
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                //stopMovingPlayers(e);
-                System.out.println("alsdkfj");
-            }
-        });
     }
 
     private void initComponents() {

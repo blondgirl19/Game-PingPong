@@ -11,4 +11,12 @@ public interface constants {
     int LIST_ITEMS_SPACING = 5;
 
     int PLAYERS_COUNT = 2;
+    int TITLE_TRANSPARENT_MARGINS = 23;
+
+    int TABLE_MARGINS = 10;
+    int TABLE_BORDER = 5;
+
+    int STOP_MOVING = 0;
+    int DIRECTION_UP = 1;
+    int DIRECTION_DOWN = 2;
 }

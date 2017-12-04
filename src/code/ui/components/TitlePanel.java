@@ -20,12 +20,7 @@ public class TitlePanel extends JPanel {
         initTitle();
         initBackButton();
 
-        JLabel shadowLabel = new JLabel();
-        styles.setComponentMargins(shadowLabel, constants.SHADOW_MARGINS);
-
-        shadowLabel.setBackground(colors.SHADOW);
-        shadowLabel.setOpaque(true);
-        add(shadowLabel, BorderLayout.SOUTH);
+        setupShadow();
     }
 
     private void initTitle() {
@@ -42,6 +37,10 @@ public class TitlePanel extends JPanel {
         add(backLabel, BorderLayout.WEST);
 
         backLabel.setVisible(false);
+
+        JLabel invisibleLabel = new JLabel();
+        styles.setComponentMargins(invisibleLabel, constants.TITLE_TRANSPARENT_MARGINS);
+        add(invisibleLabel, BorderLayout.EAST);
     }
 
     public void setBackButtonClickListener(MouseAdapter mouseListener) {
@@ -54,5 +53,13 @@ public class TitlePanel extends JPanel {
 
     public void setTitle(String text) {
         titleLabel.setText(text);
+    }
+
+    private void setupShadow() {
+        JLabel shadowLabel = new JLabel();
+        styles.setComponentMargins(shadowLabel, constants.SHADOW_MARGINS);
+        shadowLabel.setBackground(colors.SHADOW);
+        shadowLabel.setOpaque(true);
+        add(shadowLabel, BorderLayout.SOUTH);
     }
 }

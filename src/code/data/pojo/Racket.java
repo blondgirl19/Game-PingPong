@@ -1,63 +1,64 @@
 package code.data.pojo;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 
-import static resources.constants.*;
-
+import static resources.constants.DIRECTION_DOWN;
+import static resources.constants.DIRECTION_UP;
+import static resources.constants.STOP_MOVING;
 
 public class Racket {
-    public static final double STEP_IN_PIXELS = 2;
-    private static final int WIDTH = 10, HEIGHT = 100;
-    private double xCoordinate, yCoordinate, oneStep;
+    private int moveDirection;
+    private int racketWidth, racketHeight;
+    private int currentX, currentY;
+    private int oneStepInPX;
 
-    public Racket(int xCoordinate) {
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = MAIN_FRAME_HEIGHT / 2;
+    public Racket(int startX, int startY, int racketWidth, int racketHeight, int oneStepInPX) {
+        this.currentX = startX;
+        this.currentY = startY;
+        this.racketHeight = racketHeight;
+        this.racketWidth = racketWidth;
+        this.oneStepInPX = oneStepInPX;
+        this.moveDirection = STOP_MOVING;
     }
 
-    public void updateCoordinate() {
-        if (isWithinTheScreen())
-            yCoordinate += oneStep;
-        else if (isHitTop())
-            yCoordinate += STEP_IN_PIXELS;
-        else if (isHitBottom())
-            yCoordinate -= STEP_IN_PIXELS;
+    public void setMoveDirection(int direction) {
+        this.moveDirection = direction;
     }
 
-    private boolean isWithinTheScreen(){
-        return !isHitTop() && !isHitBottom();
+    private int getCurrentStep() {
+        switch (moveDirection) {
+            case DIRECTION_UP:
+                return -oneStepInPX;
+            case DIRECTION_DOWN:
+                return oneStepInPX;
+            default:
+                return 0;
+        }
     }
 
-    private boolean isHitTop(){
-        return yCoordinate <= TOP_COORDINATE;
+    public void update(int tableWidth, int tableHeight) {
+        if (isHitTop(tableHeight)) {
+            currentY += oneStepInPX;
+        } else if (isHitBottom(tableHeight)) {
+            currentY -= oneStepInPX;
+        } else {                        //is within the screen
+            currentY += getCurrentStep();
+        }
     }
 
-    private boolean isHitBottom(){
-        return yCoordinate >= MAIN_FRAME_HEIGHT - HEIGHT - 29;
+    private boolean isHitTop(int tableHeight){
+        return currentY <= tableHeight;
     }
 
-    public void moveUp(){
-        oneStep = -STEP_IN_PIXELS;
-    }
-
-    public void moveDown(){
-        oneStep = STEP_IN_PIXELS;
-    }
-
-    public void stopMoving(){
-        oneStep = 0;
-    }
-
-    public double getCurrentYCoordinate(){
-        return yCoordinate;
+    private boolean isHitBottom(int tableHeight){
+        return currentY >= (tableHeight - racketHeight);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int)xCoordinate, (int)yCoordinate, WIDTH, HEIGHT);
+        return new Rectangle(currentX, currentY, racketWidth, racketHeight);
     }
 
-    public void paint(Graphics g) {
-        g.fillRect((int)xCoordinate, (int)yCoordinate, WIDTH, HEIGHT);
+    public void repaint(Graphics g) {
+        g.fillRect(currentX, currentY, racketWidth, racketHeight);
     }
 }

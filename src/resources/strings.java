@@ -43,5 +43,5 @@ public interface strings {
     String DIFFICULT = "Сложность: ";
 
     //GAME
-    String VS = " VS ";
+    String SCORES_FORMAT = "%d : %d";
 }

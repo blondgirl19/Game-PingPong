@@ -6,10 +6,15 @@ public abstract class BasePlayer {
     private String name;
     private String type;
     private int moveDirection;
+    protected Racket racket;
 
     public BasePlayer(String name, String type) {
         this.name = name;
         this.type = type;
+    }
+
+    public void setRacket(Racket racket) {
+        this.racket = racket;
     }
 
     public String getName() {
@@ -32,9 +37,6 @@ public abstract class BasePlayer {
         moveDirection = direction;
     }
 
-    public abstract void update(int ballX, int ballY);
+    public abstract void update(int ballX, int ballY, int tableWidth, int tableHeight);
     public abstract void endGame();
-
-    public static final int DIRECTION_UP = 1;
-    public static final int DIRECTION_DOWN = 2;
 }

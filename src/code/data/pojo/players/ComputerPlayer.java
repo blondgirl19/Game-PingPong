@@ -11,7 +11,7 @@ public class ComputerPlayer extends BasePlayer {
     }
 
     @Override
-    public void update(int ballX, int ballY) {
+    public void update(int ballX, int ballY, int tableWidth, int tableHeight) {
 
     }
 
