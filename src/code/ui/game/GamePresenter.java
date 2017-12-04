@@ -16,6 +16,7 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
 
     private void setupRunnable() {
         pauseGame();
+
         gameUpdateThread = new Thread(() -> {
             while (!isExit){
                 checkPause();
@@ -43,11 +44,6 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
     @Override
     public void pauseGame() {
         isPause = true;
-    }
-
-    @Override
-    public void stopGame() {
-        pauseGame();
     }
 
     @Override

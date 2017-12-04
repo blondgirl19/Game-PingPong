@@ -2,17 +2,15 @@ package code.data.pojo;
 
 import java.awt.*;
 
-import static resources.constants.DIRECTION_DOWN;
-import static resources.constants.DIRECTION_UP;
-import static resources.constants.STOP_MOVING;
+import static resources.constants.*;
 
 public class Racket {
     private int moveDirection;
     private int racketWidth, racketHeight;
-    private int currentX, currentY;
-    private int oneStepInPX;
+    private double currentX, currentY;
+    private double oneStepInPX;
 
-    public Racket(int startX, int startY, int racketWidth, int racketHeight, int oneStepInPX) {
+    public Racket(int startX, int startY, int racketWidth, int racketHeight, double oneStepInPX) {
         this.currentX = startX;
         this.currentY = startY;
         this.racketHeight = racketHeight;
@@ -21,11 +19,15 @@ public class Racket {
         this.moveDirection = STOP_MOVING;
     }
 
+    public Racket(int startX, int startY) {
+        this(startX, startY, DEFAULT_RACKET_WIDTH, DEFAULT_RACKET_HEIGHT, DEFAULT_RACKET_STEP_PX);
+    }
+
     public void setMoveDirection(int direction) {
         this.moveDirection = direction;
     }
 
-    private int getCurrentStep() {
+    private double getCurrentStep() {
         switch (moveDirection) {
             case DIRECTION_UP:
                 return -oneStepInPX;
@@ -55,10 +57,10 @@ public class Racket {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(currentX, currentY, racketWidth, racketHeight);
+        return new Rectangle((int) currentX, (int)currentY, racketWidth, racketHeight);
     }
 
     public void repaint(Graphics g) {
-        g.fillRect(currentX, currentY, racketWidth, racketHeight);
+        g.fillRect((int)currentX, (int)currentY, racketWidth, racketHeight);
     }
 }

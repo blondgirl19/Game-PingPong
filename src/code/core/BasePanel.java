@@ -1,5 +1,6 @@
 package code.core;
 
+import code.ui.MainFrame;
 import code.ui.components.TitlePanel;
 
 import javax.swing.*;

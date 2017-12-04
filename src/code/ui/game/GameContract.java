@@ -11,7 +11,6 @@ public interface GameContract {
     interface IGamePresenter {
         void loadPlayers();
         void pauseGame();
-        void stopGame();
         void resumeGame();
         void exitGame();
     }

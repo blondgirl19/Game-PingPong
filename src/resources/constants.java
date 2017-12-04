@@ -19,4 +19,8 @@ public interface constants {
     int STOP_MOVING = 0;
     int DIRECTION_UP = 1;
     int DIRECTION_DOWN = 2;
+
+    double DEFAULT_RACKET_STEP_PX = 2.5;
+    int DEFAULT_RACKET_WIDTH = 10, DEFAULT_RACKET_HEIGHT = 100;
+
 }

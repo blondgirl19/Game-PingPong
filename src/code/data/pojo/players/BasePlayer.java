@@ -2,6 +2,8 @@ package code.data.pojo.players;
 
 import code.data.pojo.Racket;
 
+import java.awt.*;
+
 public abstract class BasePlayer {
     private String name;
     private String type;
@@ -37,6 +39,10 @@ public abstract class BasePlayer {
         moveDirection = direction;
     }
 
+    public void repaint(Graphics g) {
+        racket.repaint(g);
+    }
     public abstract void update(int ballX, int ballY, int tableWidth, int tableHeight);
+
     public abstract void endGame();
 }
