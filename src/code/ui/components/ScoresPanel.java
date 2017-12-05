@@ -1,21 +1,20 @@
 package code.ui.components;
 
-import code.data.pojo.players.BasePlayer;
+import code.data.pojo.game.Player;
 import resources.colors;
 import resources.constants;
 import resources.strings;
 import resources.styles;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class ScoresPanel extends JPanel {
-    private BasePlayer leftPlayer, rightPlayer;
+    private Player leftPlayer, rightPlayer;
     private int leftPlayerScores, rightPlayerScores;
     private JLabel scoresLabel;
 
-    public ScoresPanel(BasePlayer leftPlayer, BasePlayer rightPlayer) {
+    public ScoresPanel(Player leftPlayer, Player rightPlayer) {
         this.leftPlayer = leftPlayer;
         this.rightPlayer = rightPlayer;
         setOpaque(true);

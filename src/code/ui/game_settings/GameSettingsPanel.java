@@ -1,7 +1,7 @@
 package code.ui.game_settings;
 
 import code.core.BasePanel;
-import code.data.pojo.players.BasePlayer;
+import code.data.pojo.game.Player;
 import code.ui.components.PlayerSelectionPanel;
 import code.ui.game.GamePanel;
 import code.ui.main_menu.MainMenuPanel;
@@ -37,8 +37,8 @@ public class GameSettingsPanel extends BasePanel implements GameSettingsContract
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (leftPlayerPanel.checkIsDataValid() && rightPlayerPanel.checkIsDataValid()) {
-                    BasePlayer leftPlayer = leftPlayerPanel.getPlayer();
-                    BasePlayer rightPlayer = rightPlayerPanel.getPlayer();
+                    Player leftPlayer = leftPlayerPanel.getPlayer();
+                    Player rightPlayer = rightPlayerPanel.getPlayer();
 
                     presenter.savePlayers(leftPlayer, rightPlayer);
                 }
@@ -67,7 +67,7 @@ public class GameSettingsPanel extends BasePanel implements GameSettingsContract
     }
 
     @Override
-    public void onPlayersLoaded(BasePlayer leftPlayer, BasePlayer rightPlayer) {
+    public void onPlayersLoaded(Player leftPlayer, Player rightPlayer) {
         JPanel playersSelectionPanel = new JPanel(new GridLayout(0, constants.PLAYERS_COUNT));
         playersSelectionPanel.setOpaque(false);
 

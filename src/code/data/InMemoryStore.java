@@ -1,31 +1,59 @@
 package code.data;
 
-import code.data.pojo.players.BasePlayer;
-import code.data.pojo.players.ComputerPlayer;
-import code.data.pojo.players.HumanPlayer;
-import resources.strings;
+import code.data.pojo.game.Player;
+import code.data.pojo.controllers.BasePlayerController;
+import code.data.pojo.controllers.ComputerController;
+import code.data.pojo.controllers.HumanController;
+import resources.constants;
+
+import static resources.constants.*;
 
 public class InMemoryStore {
-    private static BasePlayer leftPlayer, rightPlayer;
+    private static BasePlayerController leftPlayerController, rightPlayerController;
 
-    public void savePlayers(BasePlayer leftPlayer, BasePlayer rightPlayer) {
-        InMemoryStore.leftPlayer = leftPlayer;
-        InMemoryStore.rightPlayer = rightPlayer;
+    public void savePlayers(Player leftPlayer, Player rightPlayer) {
+        leftPlayerController = createPlayerController(leftPlayer);
+        rightPlayerController = createPlayerController(rightPlayer);
     }
 
-    public BasePlayer getLeftPlayer() {
-        if (InMemoryStore.leftPlayer == null) {
-            InMemoryStore.leftPlayer = new ComputerPlayer("Roger", strings.MEDIUM);
+    private BasePlayerController createPlayerController(Player player) {
+        if (player.isHuman()) {
+            switch (player.getSide()) {
+                case SIDE_LEFT:
+                    return new HumanController(player, LEFT_PLAYER_UP_CODE, LEFT_PLAYER_DOWN_CODE);
+
+                case SIDE_RIGHT:
+                default:
+                    return new HumanController(player, RIGHT_PLAYER_UP_CODE, RIGHT_PLAYER_DOWN_CODE);
+            }
         }
 
-        return InMemoryStore.leftPlayer;
+        return new ComputerController(player);
     }
 
-    public BasePlayer getRightPlayer() {
-        if (InMemoryStore.rightPlayer == null) {
-            InMemoryStore.rightPlayer = new HumanPlayer("Simple Human");
+    public Player getLeftPlayer() {
+        if (leftPlayerController == null) {
+            Player leftPlayer = new Player("Roger", constants.COMPUTER_MEDIUM, SIDE_LEFT);
+            leftPlayerController = createPlayerController(leftPlayer);
         }
 
-        return InMemoryStore.rightPlayer;
+        return leftPlayerController.getPlayer();
+    }
+
+    public Player getRightPlayer() {
+        if (rightPlayerController == null) {
+            Player rightPlayer = new Player("Simple Human", HUMAN, SIDE_RIGHT);
+            rightPlayerController = createPlayerController(rightPlayer);
+        }
+
+        return rightPlayerController.getPlayer();
+    }
+
+    public BasePlayerController getLeftPlayerController(){
+        return leftPlayerController;
+    }
+
+    public BasePlayerController getRightPlayerController() {
+        return rightPlayerController;
     }
 }

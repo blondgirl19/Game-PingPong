@@ -1,8 +1,6 @@
 package code.ui.components;
 
-import code.data.pojo.players.BasePlayer;
-import code.data.pojo.players.ComputerPlayer;
-import code.data.pojo.players.HumanPlayer;
+import code.data.pojo.game.Player;
 import resources.colors;
 import resources.constants;
 import resources.strings;
@@ -18,34 +16,30 @@ public class PlayerSelectionPanel extends JPanel {
     private JTextField nameInputField;
     private JComboBox playersCompoBox, difficultComboBox;
     private JLabel difficultLabel;
+    private int playerSide;
 
-    public PlayerSelectionPanel(String playerNumber, BasePlayer previousPlayer) {
+    public PlayerSelectionPanel(String panelTitle, Player previousPlayer) {
+        playerSide = previousPlayer.getSide();
+
         setLayout(new BorderLayout());
         setOpaque(false);
         LineBorder lineBorder = new LineBorder(colors.ORANGE, constants.BORDER_THICKNESS, true);
         setBorder(lineBorder);
         styles.setComponentMargins(this, constants.TITLE_MARGINS);
 
-        initPlayerLabel(playerNumber);
+        initPlayerLabel(panelTitle);
         initDataInputPanel();
         initNameInput(previousPlayer.getName());
-        initPlayerTypeSelection(previousPlayer.getType());
+        initPlayerTypeSelection(previousPlayer.isHuman());
         initComputerDifficultSelection();
 
-        onPlayerSelected(previousPlayer.getType());
+        onPlayerSelected(!previousPlayer.isHuman());
     }
 
-    private void initDataInputPanel() {
-        dataInputPanel = new JPanel(new GridLayout(0, 2, 0, constants.LIST_ITEMS_SPACING));
-        dataInputPanel.setBackground(colors.WHITE);
-        styles.setComponentMargins(dataInputPanel, constants.TITLE_MARGINS);
-        add(dataInputPanel, BorderLayout.CENTER);
-    }
-
-    private void initPlayerLabel(String playerNumber) {
+    private void initPlayerLabel(String title) {
         JPanel titlePanel = new JPanel(new BorderLayout());
 
-        JLabel titleLabel = new JLabel(playerNumber);
+        JLabel titleLabel = new JLabel(title);
         styles.LightTextStyle(titleLabel);
         titleLabel.setOpaque(true);
         titleLabel.setBackground(colors.WHITE);
@@ -62,6 +56,13 @@ public class PlayerSelectionPanel extends JPanel {
         add(titlePanel, BorderLayout.NORTH);
     }
 
+    private void initDataInputPanel() {
+        dataInputPanel = new JPanel(new GridLayout(0, 2, 0, constants.LIST_ITEMS_SPACING));
+        dataInputPanel.setBackground(colors.WHITE);
+        styles.setComponentMargins(dataInputPanel, constants.TITLE_MARGINS);
+        add(dataInputPanel, BorderLayout.CENTER);
+    }
+
     private void initNameInput(String previousName) {
         addDataInputLabel(strings.NAME);
 
@@ -72,7 +73,7 @@ public class PlayerSelectionPanel extends JPanel {
         dataInputPanel.add(nameInputField);
     }
 
-    private void initPlayerTypeSelection(String previousType) {
+    private void initPlayerTypeSelection(boolean isHumanType) {
         addDataInputLabel(strings.PLAYER_TYPE);
 
         String[] playerTypes = {strings.HUMAN, strings.COMPUTER};
@@ -80,9 +81,9 @@ public class PlayerSelectionPanel extends JPanel {
         playersCompoBox = new JComboBox(playerTypes);
         styles.MediumFontStyle(playersCompoBox);
 
-        int selectedIndex = 0;
-        if (previousType.equals(strings.COMPUTER)) {
-            selectedIndex = 1;
+        int selectedIndex = 1;
+        if (isHumanType) {
+            selectedIndex = 0;
         }
 
         playersCompoBox.setSelectedIndex(selectedIndex);
@@ -92,22 +93,12 @@ public class PlayerSelectionPanel extends JPanel {
         playersCompoBox.addActionListener(e -> {
             JComboBox jComboBox = (JComboBox) e.getSource();
             String playerType = (String) jComboBox.getSelectedItem();
-            onPlayerSelected(playerType);
+            onPlayerSelected(!playerType.equals(strings.HUMAN));
         });
     }
 
-    private void onPlayerSelected(String playerType) {
-        setComputerDifficultVisible(playerType.equals(strings.COMPUTER));
-
-        /*switch (playerType) {
-            case strings.HUMAN:
-                setComputerDifficultVisible(false);
-                break;
-
-            case strings.COMPUTER:
-                setComputerDifficultVisible(true);
-                break;
-        }*/
+    private void onPlayerSelected(boolean isHuman) {
+        setComputerDifficultVisible(isHuman);
     }
 
     private void setComputerDifficultVisible(boolean isVisible) {
@@ -140,21 +131,38 @@ public class PlayerSelectionPanel extends JPanel {
         return !name.isEmpty();
     }
 
-    public BasePlayer getPlayer() {
+    public Player getPlayer() {
         String playerName = getPlayerName();
         String type = (String) playersCompoBox.getSelectedItem();
 
         if (type != null) {
             switch (type) {
                 case strings.COMPUTER:
-                    String difficult = (String) difficultComboBox.getSelectedItem();
-                    return new ComputerPlayer(playerName, difficult);
+                    return new Player(playerName, getComputerDifficult(), playerSide);
                 case strings.HUMAN:
-                    return new HumanPlayer(playerName);
+                    return new Player(playerName, constants.HUMAN, playerSide);
             }
         }
 
         return null;
+    }
+
+    private int getComputerDifficult() {
+        String difficultString = (String) difficultComboBox.getSelectedItem();
+        if (difficultString != null) {
+            switch (difficultString) {
+                case strings.EASY:
+                    return constants.COMPUTER_EASY;
+
+                case strings.HARD:
+                    return constants.COMPUTER_HARD;
+
+                case strings.MEDIUM:
+                    return constants.COMPUTER_MEDIUM;
+            }
+        }
+
+        return constants.COMPUTER_MEDIUM;
     }
 
     private String getPlayerName() {

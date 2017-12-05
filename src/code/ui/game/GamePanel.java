@@ -1,21 +1,28 @@
 package code.ui.game;
 
 import code.core.BasePanel;
-import code.data.pojo.Racket;
-import code.data.pojo.players.BasePlayer;
+import code.data.pojo.Dimension;
+import code.data.pojo.game.Ball;
+import code.data.pojo.game.Player;
+import code.data.pojo.Point;
+import code.data.pojo.game.Racket;
+import code.data.pojo.controllers.BasePlayerController;
+import code.data.pojo.controllers.HumanController;
 import code.ui.components.ScoresPanel;
 import code.ui.components.TablePanel;
 import code.ui.game_settings.GameSettingsPanel;
 import resources.strings;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
-public class GamePanel extends BasePanel implements GameContract.IGameView, TablePanel.PaintCallback {
+public class GamePanel extends BasePanel implements GameContract.IGameView, TablePanel.PaintCallback, Ball.BallCallback {
     private GamePresenter presenter;
     private TablePanel tablePanel;
-    private BasePlayer leftPlayer, rightPlayer;
+    private BasePlayerController leftController, rightController;
+    private Player leftPlayer, rightPlayer;
+    private Ball ball;
+    private ScoresPanel scoresPanel;
 
     @Override
     protected void providePresenter() {
@@ -32,6 +39,7 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 presenter.exitGame();
+                removePlayersRackets();
                 gotoPanel(new GameSettingsPanel());
             }
         });
@@ -43,56 +51,135 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
         tablePanel = new TablePanel();
         tablePanel.setCallback(this);
         screenContentPanel.add(tablePanel, BorderLayout.CENTER);
-        presenter.loadPlayers();
+
+        presenter.loadControllers();
+        initScreenResizeListener();
+    }
+
+    private void initScreenResizeListener() {
+        tablePanel.addComponentListener(new ComponentAdapter() {
+            private Dimension previousDimension;
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                Dimension currentDimension = tablePanel.getDimension();
+
+                if (previousDimension != null && !previousDimension.equals(currentDimension)) {
+                    double scaleX = currentDimension.width / previousDimension.width;
+                    double scaleY = currentDimension.height / previousDimension.height;
+
+                    leftPlayer.onScreenResized(scaleX, scaleY);
+                    rightPlayer.onScreenResized(scaleX, scaleY);
+                }
+
+                previousDimension = currentDimension;
+            }
+        });
     }
 
     @Override
-    public void onPlayersLoaded(BasePlayer leftPlayer, BasePlayer rightPlayer) {
-        this.leftPlayer = leftPlayer;
-        this.rightPlayer = rightPlayer;
-        initRackets();
+    public void onControllersLoaded(BasePlayerController leftController, BasePlayerController rightController) {
+        this.leftController = leftController;
+        leftPlayer = leftController.getPlayer();
 
-        ScoresPanel scoresPanel = new ScoresPanel(leftPlayer, rightPlayer);
+        this.rightController = rightController;
+        rightPlayer = rightController.getPlayer();
+
+        if (leftPlayer.isHuman()) {
+            addKeyListener((HumanController) leftController);
+        }
+
+        if (rightPlayer.isHuman()) {
+            addKeyListener((HumanController) rightController);
+        }
+
+        scoresPanel = new ScoresPanel(leftPlayer, rightPlayer);
         screenContentPanel.add(scoresPanel, BorderLayout.SOUTH);
 
         presenter.resumeGame();
     }
 
-    private void initRackets() {
-        printDimention();
+    private void initRacketsStartCoordinates() {
         int racketStartY = tablePanel.getHeight()/2;
 
-        Racket leftRacket = new Racket(100, racketStartY);
-        leftPlayer.setRacket(leftRacket);
+        Racket leftRacket = leftPlayer.getRacket();
+        leftRacket.setCoordinates(new Point(tablePanel.getRacketStartX(), racketStartY));
 
-        Racket rightRacket = new Racket(tablePanel.getWidth(), racketStartY);
-        rightPlayer.setRacket(rightRacket);
+        Racket rightRacket = rightPlayer.getRacket();
+        rightRacket.setCoordinates(new Point(tablePanel.getRacketEndX(), racketStartY));
+    }
+
+    private void removePlayersRackets() {
+        leftPlayer.getRacket().removeFromField();
+        rightPlayer.getRacket().removeFromField();
     }
 
     @Override
     public void updateScreen() {
-        tablePanel.repaint();
-    }
+        if (isGameComponentsInit()) {
+            ball.update(leftPlayer.getRacket().getBounds(),
+                    rightPlayer.getRacket().getBounds(),
+                    tablePanel.getMinBallCoordinates(),
+                    tablePanel.getMaxBallCoordinates());
 
-    private int counter = 0;
+            rightController.update(ball.getCoordinates(), tablePanel.getDimension());
+            leftController.update(ball.getCoordinates(), tablePanel.getDimension());
 
-    @Override
-    public void onPaintComponent(Graphics g) {
-        leftPlayer.repaint(g);
-        rightPlayer.repaint(g);
-
-        counter++;
-        if (counter % 200 == 0) {
-            printDimention();
+            tablePanel.repaint();
         }
     }
 
-    private void printDimention() {
-        int screenWidth = getWidth();
-        int screenHeight = getHeight();
-        int tableWidth = tablePanel.getWidth();
-        int tableHeight = tablePanel.getHeight();
+    private void checkGameComponentsInit() {
+        if (isTableInit()) {
+            if (!isGameComponentsInit()) {
+                initRacketsStartCoordinates();
+                respawnBall();
+                setFocusable(true);
+                requestFocusInWindow();
+            }
+        }
+    }
 
-        System.out.println("H: " + screenHeight + ", W: " + screenWidth + ", TH: " + tableHeight + ", TW: " + tableWidth);
+    private boolean isGameComponentsInit() {
+        boolean isRacketInit = leftPlayer.getRacket().isInitialized() && rightPlayer.getRacket().isInitialized();
+        return isRacketInit && ball != null && isTableInit();
+    }
+
+    @Override
+    public void respawnBall() {
+        if (ball == null) {
+            ball = new Ball();
+            ball.setCallback(this);
+        }
+
+        ball.respawn(tablePanel.getCenterPoint());
+
+    }
+
+    private boolean isTableInit() {
+        return tablePanel.getWidth() > 0 && tablePanel.getHeight() > 0;
+    }
+
+    @Override
+    public void onPaintComponent(Graphics g) {
+        checkGameComponentsInit();
+
+        leftPlayer.repaint(g);
+        rightPlayer.repaint(g);
+        ball.repaint(g);
+        repaint();
+    }
+
+    @Override
+    public void onLeftPlayerGoal() {
+        scoresPanel.incRightPlayerScore();
+        presenter.onGoalEvent();
+    }
+
+    @Override
+    public void onRightPlayerGoal() {
+        scoresPanel.incLeftPlayerScores();
+        presenter.onGoalEvent();
     }
 }

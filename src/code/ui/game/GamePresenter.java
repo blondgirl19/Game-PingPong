@@ -2,7 +2,8 @@ package code.ui.game;
 
 import code.core.Presenter;
 import code.data.InMemoryStore;
-import code.data.pojo.players.BasePlayer;
+
+import static resources.constants.SCREEN_UPDATE_DELAY;
 
 public class GamePresenter extends Presenter<GameContract.IGameView> implements GameContract.IGamePresenter {
     private InMemoryStore inMemoryStore;
@@ -23,7 +24,7 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
                 view().updateScreen();
 
                 try {
-                    Thread.sleep(TIME_BETWEEN_SCREEN_UPDATE_IN_MILLIS);
+                    Thread.sleep(SCREEN_UPDATE_DELAY);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -34,11 +35,8 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
     }
 
     @Override
-    public void loadPlayers() {
-        BasePlayer leftPlayer = inMemoryStore.getLeftPlayer();
-        BasePlayer rightPlayer = inMemoryStore.getRightPlayer();
-
-        view().onPlayersLoaded(leftPlayer, rightPlayer);
+    public void loadControllers() {
+        view().onControllersLoaded(inMemoryStore.getLeftPlayerController(), inMemoryStore.getRightPlayerController());
     }
 
     @Override
@@ -60,6 +58,11 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
         }
     }
 
+    @Override
+    public void onGoalEvent() {
+        view().respawnBall();
+    }
+
     private synchronized void checkPause(){
         while (isPause)
             try {
@@ -68,6 +71,4 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
                 e.printStackTrace();
             }
     }
-
-    public static final long TIME_BETWEEN_SCREEN_UPDATE_IN_MILLIS = 5;
 }

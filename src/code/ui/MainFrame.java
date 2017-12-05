@@ -5,7 +5,6 @@ import code.ui.main_menu.MainMenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 import static resources.constants.*;
 
@@ -16,7 +15,7 @@ public class MainFrame extends JFrame {
     }
 
     public void initMainFrame() {
-        Dimension dimension = new Dimension(MAIN_FRAME_WIDTH, MAIN_FRAME_HEIGHT);
+        Dimension dimension = new Dimension(MIN_MAIN_FRAME_WIDTH, MIN_MAIN_FRAME_HEIGHT);
         setSize(dimension);
         setMinimumSize(dimension);
         setTitle(strings.APP_TITLE);

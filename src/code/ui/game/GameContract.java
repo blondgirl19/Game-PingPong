@@ -1,17 +1,21 @@
 package code.ui.game;
 
-import code.data.pojo.players.BasePlayer;
+import code.data.pojo.controllers.BasePlayerController;
 
 public interface GameContract {
     interface IGameView {
-        void onPlayersLoaded(BasePlayer leftPlayer, BasePlayer rightPlayer);
+        void onControllersLoaded(BasePlayerController leftController, BasePlayerController rightController);
         void updateScreen();
+
+        void respawnBall();
     }
 
     interface IGamePresenter {
-        void loadPlayers();
+        void loadControllers();
         void pauseGame();
         void resumeGame();
         void exitGame();
+
+        void onGoalEvent();
     }
 }
