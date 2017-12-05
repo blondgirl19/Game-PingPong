@@ -1,7 +1,8 @@
 package code.data;
 
+import code.data.pojo.GameParams;
 import code.data.pojo.game.Player;
-import code.data.pojo.controllers.BasePlayerController;
+import code.data.pojo.controllers.PlayerController;
 import code.data.pojo.controllers.ComputerController;
 import code.data.pojo.controllers.HumanController;
 import resources.constants;
@@ -9,14 +10,15 @@ import resources.constants;
 import static resources.constants.*;
 
 public class InMemoryStore {
-    private static BasePlayerController leftPlayerController, rightPlayerController;
+    private static PlayerController leftPlayerController, rightPlayerController;
+    private GameParams gameParams;
 
     public void savePlayers(Player leftPlayer, Player rightPlayer) {
         leftPlayerController = createPlayerController(leftPlayer);
         rightPlayerController = createPlayerController(rightPlayer);
     }
 
-    private BasePlayerController createPlayerController(Player player) {
+    private PlayerController createPlayerController(Player player) {
         if (player.isHuman()) {
             switch (player.getSide()) {
                 case SIDE_LEFT:
@@ -49,11 +51,23 @@ public class InMemoryStore {
         return rightPlayerController.getPlayer();
     }
 
-    public BasePlayerController getLeftPlayerController(){
+    public PlayerController getLeftPlayerController(){
         return leftPlayerController;
     }
 
-    public BasePlayerController getRightPlayerController() {
+    public PlayerController getRightPlayerController() {
         return rightPlayerController;
+    }
+
+    public GameParams getGameParams() {
+        if (gameParams == null) {
+            gameParams = new GameParams();
+        }
+
+        return gameParams;
+    }
+
+    public void setGameParams(GameParams gameParams) {
+        this.gameParams = gameParams;
     }
 }

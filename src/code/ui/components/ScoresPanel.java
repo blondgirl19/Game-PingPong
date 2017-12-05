@@ -13,8 +13,12 @@ public class ScoresPanel extends JPanel {
     private Player leftPlayer, rightPlayer;
     private int leftPlayerScores, rightPlayerScores;
     private JLabel scoresLabel;
+    private int scoresToWin;
+    private ScoresCallback callback;
 
-    public ScoresPanel(Player leftPlayer, Player rightPlayer) {
+    public ScoresPanel(Player leftPlayer, Player rightPlayer, int scoresToWin) {
+        this.scoresToWin = scoresToWin;
+
         this.leftPlayer = leftPlayer;
         this.rightPlayer = rightPlayer;
         setOpaque(true);
@@ -27,6 +31,10 @@ public class ScoresPanel extends JPanel {
         setupDivider();
     }
 
+    public void setCallback(ScoresCallback callback) {
+        this.callback = callback;
+    }
+
     public void refreshScores() {
         leftPlayerScores = 0;
         rightPlayerScores = 0;
@@ -35,11 +43,23 @@ public class ScoresPanel extends JPanel {
     public void incLeftPlayerScores() {
         leftPlayerScores++;
         repaintScores();
+        checkGameEnd();
     }
 
     public void incRightPlayerScore() {
         rightPlayerScores++;
         repaintScores();
+        checkGameEnd();
+    }
+
+    private void checkGameEnd() {
+        if (callback != null) {
+            if (leftPlayerScores >= scoresToWin) {
+                callback.onPlayerWin(leftPlayer.getName());
+            } else if (rightPlayerScores >= scoresToWin) {
+                callback.onPlayerWin(rightPlayer.getName());
+            }
+        }
     }
 
     private void repaintScores() {
@@ -78,5 +98,9 @@ public class ScoresPanel extends JPanel {
         shadowLabel.setBackground(colors.DARK_GRAY);
         shadowLabel.setOpaque(true);
         add(shadowLabel, BorderLayout.NORTH);
+    }
+
+    public interface ScoresCallback {
+        void onPlayerWin(String playerName);
     }
 }

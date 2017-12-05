@@ -5,6 +5,8 @@ import code.ui.main_menu.MainMenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import static resources.constants.*;
 

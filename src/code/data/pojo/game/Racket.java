@@ -15,15 +15,11 @@ public class Racket implements Scalable {
     private Point coordinates;
     private double oneStepInPX;
 
-    public Racket(code.data.pojo.Dimension racketSize, double oneStepInPX) {
-        this.coordinates = new code.data.pojo.Point(UNDEFINED_INT, UNDEFINED_INT);
+    public Racket(Dimension racketSize, double oneStepInPX) {
+        this.coordinates = new Point(UNDEFINED_INT, UNDEFINED_INT);
         this.racketSize = racketSize;
         this.oneStepInPX = oneStepInPX;
         this.moveDirection = STOP_MOVING;
-    }
-
-    public Racket() {
-        this(new code.data.pojo.Dimension(DEFAULT_RACKET_WIDTH, DEFAULT_RACKET_HEIGHT), DEFAULT_RACKET_STEP_PX);
     }
 
     public void setMoveDirection(int direction) {
@@ -41,7 +37,6 @@ public class Racket implements Scalable {
         }
     }
 
-    //todo moveTowardsDirection(Point minCoordinates, Point maxCoordinates);
     public void moveTowardsDirection(code.data.pojo.Dimension tableDimension) {
         double tableHeight = tableDimension.getHeight();
 
@@ -59,11 +54,11 @@ public class Racket implements Scalable {
     }
 
     private boolean isHitTop() {
-        return getRacketCenterY() <= 0;
+        return coordinates.y <= 0;
     }
 
     private boolean isHitBottom(double tableHeight){
-        return getRacketCenterY() >= tableHeight - racketSize.height;
+        return coordinates.y + racketSize.height >= tableHeight;
     }
 
     public code.data.pojo.Point getCoordinates() {
@@ -79,15 +74,7 @@ public class Racket implements Scalable {
     }
 
     public void repaint(Graphics g) {
-        g.fillRect((int) getRacketCenterX(), (int) getRacketCenterY(), (int) racketSize.width, (int) racketSize.height);
-    }
-
-    public double getRacketCenterX() {
-        return coordinates.x - racketSize.width/2;
-    }
-
-    public double getRacketCenterY() {
-        return coordinates.y - racketSize.height/2;
+        g.fillRect((int) coordinates.x, (int) coordinates.y, (int) racketSize.width, (int) racketSize.height);
     }
 
     public Dimension getRacketSize() {
@@ -115,5 +102,13 @@ public class Racket implements Scalable {
 
     public void removeFromField() {
         coordinates = new Point(constants.UNDEFINED_INT, constants.UNDEFINED_INT);
+    }
+
+    public double getRacketCenterY() {
+        return coordinates.y + racketSize.height / 2;
+    }
+
+    public double getRacketCenterX() {
+        return coordinates.x + racketSize.width/2;
     }
 }

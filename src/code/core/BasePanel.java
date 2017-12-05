@@ -43,9 +43,9 @@ public abstract class BasePanel extends JPanel {
 
     public void gotoPanel(JPanel panel) {
         setVisible(false);
-        getParent().add(panel);
-        repaint();
-        getParent().remove(this);
+        Container parent = getParent();
+        parent.add(panel);
+        parent.validate();
     }
 
     protected void showNotification(String title, String text) {

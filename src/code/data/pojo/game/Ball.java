@@ -8,21 +8,18 @@ import java.awt.*;
 public class Ball implements Scalable {
     private BallCallback callback;
 
-    private double stepInPX = 2.5;
-    private double ballDiameter = 15;
+    private double stepInPX;
+    private double ballDiameter;
     private Point coordinates;
 
     private double stepByX, stepByY;
 
-    public Ball(Point startCoordinates) {
-        stepInPX = constants.DEFAULT_BALL_STEP_IN_PX;
-        stepByX = stepInPX;
-        stepByY = stepInPX;
-        respawn(startCoordinates);
-    }
-
-    public Ball() {
-        this(new Point(constants.UNDEFINED_INT, constants.UNDEFINED_INT));
+    public Ball(double stepInPX, double ballDiameter) {
+        this.stepInPX = stepInPX;
+        this.stepByX = stepInPX;
+        this.stepByY = stepInPX;
+        this.ballDiameter = ballDiameter;
+        respawn(new Point(constants.UNDEFINED_INT, constants.UNDEFINED_INT));
     }
 
     public void setCallback(BallCallback callback) {
@@ -73,20 +70,20 @@ public class Ball implements Scalable {
         }
     }
 
-    public Point getCoordinates() {
+    public Point getCenterCoordinates() {
         return new Point(getCenterX(), getCenterY());
     }
 
     private boolean isOutOfRight(double x) {
-        return getCenterX() >= x - ballDiameter/2;
+        return coordinates.x >= x + ballDiameter/2; // will out of right bound on half width
     }
 
     private boolean isOutOfLeft(double x) {
-        return getCenterX() <= x;
+        return coordinates.x <= x - ballDiameter/2; // will out of left bound on half width
     }
 
     private boolean isTopBottomCollide(double minY, double maxY) {
-        return getCenterY() < minY || getCenterY() >= maxY - ballDiameter;
+        return coordinates.y <= minY || coordinates.y >= maxY - ballDiameter;
     }
 
     public Rectangle getBounds() {
@@ -94,7 +91,7 @@ public class Ball implements Scalable {
     }
 
     public void repaint(Graphics g) {
-        g.fillOval((int)getCenterX(), (int)getCenterY(), (int) ballDiameter, (int) ballDiameter);
+        g.fillOval((int)coordinates.x, (int)coordinates.y, (int) ballDiameter, (int) ballDiameter);
     }
 
     public double getCenterX() {

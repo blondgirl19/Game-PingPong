@@ -6,7 +6,7 @@ import code.data.pojo.Point;
 
 import static resources.constants.*;
 
-public class ComputerController extends BasePlayerController {
+public class ComputerController extends PlayerController {
     private int delaysToUpdate;
     private int updateDelayCounter;
 

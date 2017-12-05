@@ -8,7 +8,7 @@ import resources.constants;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class HumanController extends BasePlayerController implements KeyListener{
+public class HumanController extends PlayerController implements KeyListener{
     private int upKeyCode, downKeyCode;
 
     public HumanController(Player player, int upKeyCode, int downKeyCode) {

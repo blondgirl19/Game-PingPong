@@ -13,13 +13,8 @@ public class Player {
     private int side;
 
     public Player(String name, int type, int side) {
-        this(name, type, new Racket(), side);
-    }
-
-    public Player(String name, int type, Racket racket, int side) {
         this.name = name;
         this.type = type;
-        this.racket = racket;
         this.side = side;
     }
 

@@ -6,7 +6,7 @@ import code.data.pojo.game.Ball;
 import code.data.pojo.game.Player;
 import code.data.pojo.Point;
 import code.data.pojo.game.Racket;
-import code.data.pojo.controllers.BasePlayerController;
+import code.data.pojo.controllers.PlayerController;
 import code.data.pojo.controllers.HumanController;
 import code.ui.components.ScoresPanel;
 import code.ui.components.TablePanel;
@@ -16,10 +16,10 @@ import resources.strings;
 import java.awt.*;
 import java.awt.event.*;
 
-public class GamePanel extends BasePanel implements GameContract.IGameView, TablePanel.PaintCallback, Ball.BallCallback {
+public class GamePanel extends BasePanel implements GameContract.IGameView, TablePanel.PaintCallback, Ball.BallCallback, ScoresPanel.ScoresCallback {
     private GamePresenter presenter;
     private TablePanel tablePanel;
-    private BasePlayerController leftController, rightController;
+    private PlayerController leftController, rightController;
     private Player leftPlayer, rightPlayer;
     private Ball ball;
     private ScoresPanel scoresPanel;
@@ -38,11 +38,15 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                presenter.exitGame();
-                removePlayersRackets();
-                gotoPanel(new GameSettingsPanel());
+                onBackPressed();
             }
         });
+    }
+
+    private void onBackPressed() {
+        presenter.exitGame();
+        removePlayersRackets();
+        gotoPanel(new GameSettingsPanel());
     }
 
     @Override
@@ -52,7 +56,7 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
         tablePanel.setCallback(this);
         screenContentPanel.add(tablePanel, BorderLayout.CENTER);
 
-        presenter.loadControllers();
+        presenter.loadGameParams();
         initScreenResizeListener();
     }
 
@@ -79,7 +83,10 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     }
 
     @Override
-    public void onControllersLoaded(BasePlayerController leftController, BasePlayerController rightController) {
+    public void onGameParamsLoaded(PlayerController leftController, PlayerController rightController, Ball ball, int scoresToWin) {
+        this.ball = ball;
+        this.ball.setCallback(this);
+
         this.leftController = leftController;
         leftPlayer = leftController.getPlayer();
 
@@ -94,20 +101,22 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
             addKeyListener((HumanController) rightController);
         }
 
-        scoresPanel = new ScoresPanel(leftPlayer, rightPlayer);
+        scoresPanel = new ScoresPanel(leftPlayer, rightPlayer, scoresToWin);
+        scoresPanel.setCallback(this);
         screenContentPanel.add(scoresPanel, BorderLayout.SOUTH);
 
         presenter.resumeGame();
     }
 
     private void initRacketsStartCoordinates() {
-        int racketStartY = tablePanel.getHeight()/2;
-
         Racket leftRacket = leftPlayer.getRacket();
+        double racketStartY = tablePanel.getHeight()/2 - leftRacket.getRacketSize().height/2;
+
         leftRacket.setCoordinates(new Point(tablePanel.getRacketStartX(), racketStartY));
 
         Racket rightRacket = rightPlayer.getRacket();
-        rightRacket.setCoordinates(new Point(tablePanel.getRacketEndX(), racketStartY));
+        double racketX = tablePanel.getRacketEndX() - rightRacket.getRacketSize().getWidth();
+        rightRacket.setCoordinates(new Point(racketX, racketStartY));
     }
 
     private void removePlayersRackets() {
@@ -123,8 +132,8 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
                     tablePanel.getMinBallCoordinates(),
                     tablePanel.getMaxBallCoordinates());
 
-            rightController.update(ball.getCoordinates(), tablePanel.getDimension());
-            leftController.update(ball.getCoordinates(), tablePanel.getDimension());
+            rightController.update(ball.getCenterCoordinates(), tablePanel.getDimension());
+            leftController.update(ball.getCenterCoordinates(), tablePanel.getDimension());
 
             tablePanel.repaint();
         }
@@ -148,13 +157,7 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
 
     @Override
     public void respawnBall() {
-        if (ball == null) {
-            ball = new Ball();
-            ball.setCallback(this);
-        }
-
         ball.respawn(tablePanel.getCenterPoint());
-
     }
 
     private boolean isTableInit() {
@@ -165,10 +168,9 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     public void onPaintComponent(Graphics g) {
         checkGameComponentsInit();
 
+        ball.repaint(g);
         leftPlayer.repaint(g);
         rightPlayer.repaint(g);
-        ball.repaint(g);
-        repaint();
     }
 
     @Override
@@ -181,5 +183,25 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     public void onRightPlayerGoal() {
         scoresPanel.incLeftPlayerScores();
         presenter.onGoalEvent();
+    }
+
+    @Override
+    public void onPlayerWin(String name) {
+        presenter.pauseGame();
+        showYesNoDialog("Конец игры",
+                "Игрок " + name + " победил",
+                "Играть заново",
+                "Параметры игры",
+                new YesNoClickListener() {
+                    @Override
+                    public void onYesClicked() {
+
+                    }
+
+                    @Override
+                    public void onNoClicked() {
+                        onBackPressed();
+                    }
+                });
     }
 }

@@ -4,11 +4,11 @@ import code.data.pojo.Dimension;
 import code.data.pojo.Point;
 import code.data.pojo.game.Player;
 
-public abstract class BasePlayerController {
+public abstract class PlayerController {
     protected Player player;
     protected boolean isPause;
 
-    public BasePlayerController(Player player) {
+    public PlayerController(Player player) {
         this.player = player;
     }
 

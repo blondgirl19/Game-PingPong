@@ -31,7 +31,6 @@ public interface constants {
 
     int UNDEFINED_INT = -1;
 
-
     int HUMAN = 1;
     int COMPUTER_HARD = 4;
     int COMPUTER_MEDIUM = 28;
@@ -40,8 +39,10 @@ public interface constants {
     int SIDE_LEFT = 1;
     int SIDE_RIGHT = 2;
 
-    int GAME_FPS = 60;
-    int SCREEN_UPDATE_DELAY = 1000 / GAME_FPS;
+    int DEFAULT_GAME_FPS = 60;
     double DEFAULT_RACKET_STEP_PX = 6.6;
     double DEFAULT_BALL_STEP_IN_PX = 8.33;
+    int DEFAULT_SCORES_TO_WIN = 3;
+    int DEFAULT_BAL_DIAMETER = 30;
+    int MILLIS_IN_ONE_SECOND = 1000;
 }
