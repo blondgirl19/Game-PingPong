@@ -1,5 +1,7 @@
 package resources;
 
+import org.omg.PortableInterceptor.INACTIVE;
+
 import java.awt.event.KeyEvent;
 
 public interface constants {
@@ -22,7 +24,9 @@ public interface constants {
     int DIRECTION_UP = 1;
     int DIRECTION_DOWN = 2;
 
+    int MIN_RACKET_HEIGHT = 40;
     int DEFAULT_RACKET_WIDTH = 10, DEFAULT_RACKET_HEIGHT = 100;
+    int MAX_RACKET_HEIGHT = 300;
 
     int LEFT_PLAYER_UP_CODE = KeyEvent.VK_W;
     int LEFT_PLAYER_DOWN_CODE = KeyEvent.VK_S;
@@ -40,11 +44,25 @@ public interface constants {
     int SIDE_LEFT = 1;
     int SIDE_RIGHT = 2;
 
+    int FPS_MIN_VALUE = 1;
     int DEFAULT_GAME_FPS = 60;
+    int FPS_MAX_VALUE = 300;
+
+    int MIN_RACKET_STEP_PX = 1;
     double DEFAULT_RACKET_STEP_PX = 6.6;
+    int MAX_RACKET_STEP_PX = 20;
+
+    int MIN_BALL_STEP_PX = 1;
     double DEFAULT_BALL_STEP_IN_PX = 8.33;
-    int DEFAULT_SCORES_TO_WIN = 3;
+    int MAX_BALL_STEP_PX = 30;
+
+    int MIN_SCORES_TO_WIN = 1;
+    int DEFAULT_SCORES_TO_WIN = 10;
+    int MAX_SCORES_TO_WIN = 100;
+
+    int MIN_BALL_DIAMETER = 5;
     int DEFAULT_BAL_DIAMETER = 18;
+    int MAX_BALL_DIAMETER = 50;
     int MILLIS_IN_ONE_SECOND = 1000;
 
     int STATE_PAUSED = 1;

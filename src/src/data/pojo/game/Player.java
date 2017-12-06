@@ -11,11 +11,13 @@ public class Player {
     private int type;
     private Racket racket;
     private int side;
+    private Color racketColor;
 
-    public Player(String name, int type, int side) {
+    public Player(String name, int type, int side, Color racketColor) {
         this.name = name;
         this.type = type;
         this.side = side;
+        this.racketColor = racketColor;
     }
 
     public boolean isHuman() {
@@ -54,11 +56,20 @@ public class Player {
         this.side = side;
     }
 
+    public Color getRacketColor() {
+        return racketColor;
+    }
+
+    public void setRacketColor(Color racketColor) {
+        this.racketColor = racketColor;
+    }
+
     public void setMoveDirection(int direction) {
         racket.setMoveDirection(direction);
     }
 
     public void repaint(Graphics g) {
+        g.setColor(racketColor);
         racket.repaint(g);
     }
 

@@ -31,9 +31,8 @@ public class Ball implements Scalable {
 
     @Override
     public void onScreenResized(double scaleX, double scaleY) {
-        double avgScale = (scaleX + scaleY) / 2;
-
-        ballDiameter *= avgScale;
+        /*double avgScale = (scaleX + scaleY) / 2;
+        ballDiameter *= avgScale;*/ //диаметр лучше не масштабировать
 
         coordinates.x *= scaleX;
         coordinates.y *= scaleY;

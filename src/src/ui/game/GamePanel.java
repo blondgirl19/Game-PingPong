@@ -180,7 +180,6 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
         respawnRackets();
         scoresPanel.refreshScores();
         tablePanel.setTextToDraw(strings.PRESS_SPACE_TO_START);
-
     }
 
     @Override
@@ -223,7 +222,7 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     public void onPlayerWin(Player winner) {
         presenter.endGame(winner);
 
-        showYesNoDialog(
+        showYesNoDialog (
                 strings.GAME_END,
                 String.format(strings.PLAYER_WIN_FORMAT, winner.getName()),
                 strings.PLAY_AGAIN,

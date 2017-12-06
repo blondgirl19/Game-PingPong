@@ -1,5 +1,7 @@
 package src.data;
 
+import resources.colors;
+import resources.strings;
 import src.data.pojo.GameParams;
 import src.data.pojo.game.Player;
 import src.data.pojo.controllers.PlayerController;
@@ -11,7 +13,7 @@ import static resources.constants.*;
 
 public class InMemoryStore {
     private static PlayerController leftPlayerController, rightPlayerController;
-    private GameParams gameParams;
+    private static GameParams gameParams;
 
     public void savePlayers(Player leftPlayer, Player rightPlayer) {
         leftPlayerController = createPlayerController(leftPlayer);
@@ -35,7 +37,7 @@ public class InMemoryStore {
 
     public Player getLeftPlayer() {
         if (leftPlayerController == null) {
-            Player leftPlayer = new Player("Roger", constants.COMPUTER_MEDIUM, SIDE_LEFT);
+            Player leftPlayer = new Player(strings.DEFAULT_LEFT_PLAYER_NAME, constants.COMPUTER_MEDIUM, SIDE_LEFT, colors.DARK_GRAY);
             leftPlayerController = createPlayerController(leftPlayer);
         }
 
@@ -44,7 +46,7 @@ public class InMemoryStore {
 
     public Player getRightPlayer() {
         if (rightPlayerController == null) {
-            Player rightPlayer = new Player("Simple Human", HUMAN, SIDE_RIGHT);
+            Player rightPlayer = new Player(strings.DEFAULT_RIGHT_PLAYER_NAME, HUMAN, SIDE_RIGHT, colors.ORANGE);
             rightPlayerController = createPlayerController(rightPlayer);
         }
 
@@ -67,7 +69,7 @@ public class InMemoryStore {
         return gameParams;
     }
 
-    public void setGameParams(GameParams gameParams) {
+    public void saveGameParams(GameParams gameParams) {
         this.gameParams = gameParams;
     }
 }

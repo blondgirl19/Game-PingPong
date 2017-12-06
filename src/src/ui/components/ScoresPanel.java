@@ -22,12 +22,12 @@ public class ScoresPanel extends JPanel {
         this.leftPlayer = leftPlayer;
         this.rightPlayer = rightPlayer;
         setOpaque(true);
-        refreshScores();
 
         setLayout(new BorderLayout());
         setBackground(colors.WHITE);
         initLabels();
-        repaintScores();
+
+        refreshScores();
         setupDivider();
     }
 
@@ -38,6 +38,7 @@ public class ScoresPanel extends JPanel {
     public void refreshScores() {
         leftPlayerScores = 0;
         rightPlayerScores = 0;
+        repaintScores();
     }
 
     public void incLeftPlayerScores() {
@@ -48,8 +49,8 @@ public class ScoresPanel extends JPanel {
 
     public void incRightPlayerScore() {
         rightPlayerScores++;
-        checkGameEnd();
         repaintScores();
+        checkGameEnd();
     }
 
     private void checkGameEnd() {

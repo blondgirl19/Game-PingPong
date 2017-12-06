@@ -30,7 +30,7 @@ public class MainMenuPanel extends BasePanel {
 
         initClickListener();
         addLabel(strings.GAME);
-        addLabel(strings.STATISTICS);
+        //addLabel(strings.STATISTICS);
         //addLabel(SETTINGS);
         addLabel(strings.HELP);
         addLabel(strings.ABOUT);

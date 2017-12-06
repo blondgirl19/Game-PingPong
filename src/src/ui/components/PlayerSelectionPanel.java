@@ -1,5 +1,6 @@
 package src.ui.components;
 
+import src.core.BaseBorderPanel;
 import src.data.pojo.game.Player;
 import resources.colors;
 import resources.constants;
@@ -9,58 +10,34 @@ import resources.styles;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class PlayerSelectionPanel extends JPanel {
-    private JPanel dataInputPanel;
+public class PlayerSelectionPanel extends BaseBorderPanel {
+    private Player previousPlayer;
 
     private JTextField nameInputField;
     private JComboBox playersCompoBox, difficultComboBox;
     private JLabel difficultLabel;
-    private int playerSide;
+    private JButton colorPickerButton;
 
     public PlayerSelectionPanel(String panelTitle, Player previousPlayer) {
-        playerSide = previousPlayer.getSide();
+        super(colors.ORANGE, panelTitle);
+        this.previousPlayer = previousPlayer;
 
-        setLayout(new BorderLayout());
-        setOpaque(false);
-        LineBorder lineBorder = new LineBorder(colors.ORANGE, constants.BORDER_THICKNESS, true);
-        setBorder(lineBorder);
-        styles.setComponentMargins(this, constants.TITLE_MARGINS);
+        initScreenContent();
+    }
 
-        initPlayerLabel(panelTitle);
-        initDataInputPanel();
+    @Override
+    protected void initScreenContent() {
+        screenContentPanel.setLayout(new GridLayout(0, 2, 0, constants.LIST_ITEMS_SPACING));
+
         initNameInput(previousPlayer.getName());
+        initColorPicker(previousPlayer.getRacketColor());
         initPlayerTypeSelection(previousPlayer.isHuman());
-        initComputerDifficultSelection();
+        initComputerDifficultSelection(previousPlayer.getType());
 
         onPlayerSelected(!previousPlayer.isHuman());
-    }
-
-    private void initPlayerLabel(String title) {
-        JPanel titlePanel = new JPanel(new BorderLayout());
-
-        JLabel titleLabel = new JLabel(title);
-        styles.LightTextStyle(titleLabel);
-        titleLabel.setOpaque(true);
-        titleLabel.setBackground(colors.WHITE);
-        styles.setComponentMargins(titleLabel, constants.TITLE_MARGINS);
-
-
-        JLabel divider = new JLabel();
-        divider.setBackground(colors.ORANGE);
-        divider.setOpaque(true);
-        styles.setComponentMargins(divider, constants.SHADOW_MARGINS);
-
-        titlePanel.add(titleLabel, BorderLayout.CENTER);
-        titlePanel.add(divider, BorderLayout.SOUTH);
-        add(titlePanel, BorderLayout.NORTH);
-    }
-
-    private void initDataInputPanel() {
-        dataInputPanel = new JPanel(new GridLayout(0, 2, 0, constants.LIST_ITEMS_SPACING));
-        dataInputPanel.setBackground(colors.WHITE);
-        styles.setComponentMargins(dataInputPanel, constants.TITLE_MARGINS);
-        add(dataInputPanel, BorderLayout.CENTER);
     }
 
     private void initNameInput(String previousName) {
@@ -70,7 +47,7 @@ public class PlayerSelectionPanel extends JPanel {
         nameInputField.setHorizontalAlignment(SwingConstants.CENTER);
         styles.MediumFontStyle(nameInputField);
 
-        dataInputPanel.add(nameInputField);
+        screenContentPanel.add(nameInputField);
     }
 
     private void initPlayerTypeSelection(boolean isHumanType) {
@@ -88,7 +65,7 @@ public class PlayerSelectionPanel extends JPanel {
 
         playersCompoBox.setSelectedIndex(selectedIndex);
 
-        dataInputPanel.add(playersCompoBox);
+        screenContentPanel.add(playersCompoBox);
 
         playersCompoBox.addActionListener(e -> {
             JComboBox jComboBox = (JComboBox) e.getSource();
@@ -106,22 +83,54 @@ public class PlayerSelectionPanel extends JPanel {
         difficultLabel.setVisible(isVisible);
     }
 
-    private void initComputerDifficultSelection() {
+    private void initComputerDifficultSelection(int previousPlayerType) {
         difficultLabel = addDataInputLabel(strings.DIFFICULT);
 
         String[] difficultTypes = {strings.EASY, strings.MEDIUM, strings.HARD};
 
         difficultComboBox = new JComboBox(difficultTypes);
         styles.MediumFontStyle(difficultComboBox);
-        difficultComboBox.setSelectedIndex(1);
+        int selectedPosition = 1;
+        switch (previousPlayerType) {
+            case constants.COMPUTER_EASY:
+                selectedPosition = 0;
+                break;
+            case constants.COMPUTER_HARD:
+                selectedPosition = 2;
+                break;
+        }
+        difficultComboBox.setSelectedIndex(selectedPosition);
 
-        dataInputPanel.add(difficultComboBox);
+        screenContentPanel.add(difficultComboBox);
+    }
+
+    private void initColorPicker(Color previousColor) {
+        addDataInputLabel(strings.PLAYER_COLOR);
+        colorPickerButton = new JButton();
+        colorPickerButton.setBackground(previousColor);
+
+        colorPickerButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                Color newColor = JColorChooser.showDialog(
+                        PlayerSelectionPanel.this,
+                        strings.CHOOSE_COLOR,
+                        colors.DARK_GRAY);
+                if(newColor != null) {
+                    colorPickerButton.setBackground(newColor);
+                    repaint();
+                }
+            }
+        });
+
+        screenContentPanel.add(colorPickerButton);
     }
 
     private JLabel addDataInputLabel(String text) {
         JLabel label = new JLabel(text);
         styles.LightTextStyle(label);
-        dataInputPanel.add(label);
+        screenContentPanel.add(label);
 
         return label;
     }
@@ -138,9 +147,9 @@ public class PlayerSelectionPanel extends JPanel {
         if (type != null) {
             switch (type) {
                 case strings.COMPUTER:
-                    return new Player(playerName, getComputerDifficult(), playerSide);
+                    return new Player(playerName, getComputerDifficult(), previousPlayer.getSide(), colorPickerButton.getBackground());
                 case strings.HUMAN:
-                    return new Player(playerName, constants.HUMAN, playerSide);
+                    return new Player(playerName, constants.HUMAN, previousPlayer.getSide(), colorPickerButton.getBackground());
             }
         }
 

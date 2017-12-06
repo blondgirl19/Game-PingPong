@@ -61,20 +61,26 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
     }
 
     private void pauseGame() {
-        isPause = true;
+        pauseThread();
+        gameState = STATE_PAUSED;
         if (hasView()) {
             view().onGamePaused();
         }
     }
 
+    private void pauseThread() {
+        isPause = true;
+    }
+
     private synchronized void resumeGame() {
+        gameState = STATE_GAME;
         isPause = false;
         view().onGameResumed();
         notify();
     }
 
     public void restartGame() {
-        pauseGame();
+        pauseThread();
         view().onGameRestarted();
     }
 
@@ -91,13 +97,14 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
         view().respawnBall();
         isPause = true;
         if (gameState != STATE_GAME_ENDED) {
-            gameState = STATE_TIMER;
             runTimerThread();
         }
     }
 
     private void runTimerThread() {
         new Thread(() -> {
+            gameState = STATE_TIMER;
+
             for (int i = TIMER_TICKS; i > 0; i--) {
                 if (!isExit) {
                     view().onTimerTick(String.valueOf(i));
@@ -112,7 +119,6 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
                 }
             }
 
-            gameState = STATE_GAME;
             resumeGame();
         }).start();
     }
@@ -120,19 +126,13 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
     @Override
     public void onControlButtonClicked() {
         switch (gameState) {
+            case STATE_NOTHING:
             case STATE_GAME_ENDED:
             case STATE_PAUSED:
-                gameState = STATE_GAME;
-                resumeGame();
-                break;
-
-            case STATE_NOTHING:
-                gameState = STATE_GAME;
                 resumeGame();
                 break;
 
             case STATE_GAME:
-                gameState = STATE_PAUSED;
                 pauseGame();
                 break;
         }
@@ -141,8 +141,8 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
     @Override
     public void endGame(Player winner) {
         //todo save winner in db
-        isPause = true;
         gameState = STATE_GAME_ENDED;
+        pauseThread();
     }
 
     private synchronized void checkPause(){

@@ -1,6 +1,7 @@
 package src.data.pojo.game;
 
 
+import resources.colors;
 import src.data.pojo.Dimension;
 import src.data.pojo.Point;
 import resources.constants;
@@ -75,6 +76,9 @@ public class Racket implements Scalable {
 
     public void repaint(Graphics g) {
         g.fillRect((int) coordinates.x, (int) coordinates.y, (int) racketSize.width, (int) racketSize.height);
+        //borders
+        g.setColor(colors.DARK_GRAY);
+        g.drawRect((int) coordinates.x, (int) coordinates.y, (int) racketSize.width, (int) racketSize.height);
     }
 
     public Dimension getRacketSize() {
@@ -94,8 +98,8 @@ public class Racket implements Scalable {
         coordinates.x *= scaleX;
         coordinates.y *= scaleY;
 
-        racketSize.width *= scaleX;
-        racketSize.height *= scaleY;
+        /*racketSize.width *= scaleX;
+        racketSize.height *= scaleY;*/ // Размер ракеток лучше не масштабировать
 
         oneStepInPX *= scaleY;
     }

@@ -39,18 +39,22 @@ public class styles {
         BigFontStyle(button);
 
         button.setHorizontalAlignment(SwingConstants.CENTER);
+        addForegroundClickListener(button, colors.DARK_GRAY, colors.GREYISH_BROWN);
+    }
 
-        button.addMouseListener(new MouseAdapter() {
+    public static void addForegroundClickListener(JComponent component, Color pressedColor, Color releasedColor) {
+        component.setForeground(releasedColor);
+        component.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                button.setForeground(colors.DARK_GRAY);
+                component.setForeground(pressedColor);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                button.setForeground(colors.GREYISH_BROWN);
+                component.setForeground(releasedColor);
             }
         });
     }

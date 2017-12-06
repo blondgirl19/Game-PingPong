@@ -19,14 +19,15 @@ public interface strings {
     String ABOUT = "Об игре";
     String EXIT = "Выход";
 
-    String ABOUT_GAME_TEXT = "Игра была написанна простой Харьковской девушкой, Анной Сабинской.\n" +
+    String ABOUT_GAME_TEXT = "Игра была Анной Сабинской.\n" +
             "Сотрудничество:\n" +
             "vk.com/anya_slabinskaya\n" +
             "ask.fm/Annyuta11\n\n" +
             "Спасибо за скачивание!";
 
-    String HELP_TEXT = "Двигайте левого игрока вверх спомощью кнопки \"W\", вниз с помощью кнопки \"S\",\n" +
+    String HELP_TEXT = "Двигайте левого игрока кнопками \"S, W\" \n" +
             "правого - с помощью стрелок на клавиатуре.\n" +
+            "Чтобы приостановить игру, нажмите пробел на клавиатуре.\n\n" +
             "И пусть победит сильнейший из Вас!";
 
     //GAME SETTINGS
@@ -41,6 +42,20 @@ public interface strings {
     String MEDIUM = "Средний";
     String EASY = "Простой";
     String DIFFICULT = "Сложность: ";
+    String CHOOSE_COLOR = "Выберите цвет";
+    String PLAYER_COLOR = "Цвет игрока: ";
+    String ANOTHER_PARAMS = "Другие параметры";
+    String BALL_SPEED = "Скорость мяча: ";
+    String RACKETS_SPEED = "Скорость ракеток: ";
+    String RACKETS_SIZE = "Длинна ракеток: ";
+    String BALL_DIAMETER = "Диаметр мяча: ";
+    String SCORES_TO_WIN = "Голов до победы: ";
+    String GAME_FPS = "FPS: ";
+    String DEFAULT = "По умолчанию";
+    String DEFAULT_LEFT_PLAYER_NAME = "Anna";
+    String DEFAULT_RIGHT_PLAYER_NAME = "Sabinskaya";
+    String ERROR ="Ошибка!";
+    String NAME_CANNOT_BE_EMPTY = "Имя не может быть пустым";
 
     //GAME
     String SCORES_FORMAT = "%d : %d";
