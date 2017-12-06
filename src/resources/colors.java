@@ -11,4 +11,5 @@ public interface colors {
     Color GREYISH_BROWN = new Color(0x424242);
     Color SHADOW = new Color(0xCCCCCC);
     Color GREEN = new Color(0x1AB431);
+    Color RED = new Color(0xFF1E34);
 }

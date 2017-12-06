@@ -9,21 +9,25 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class styles {
-    private static final int BIG_FONT_SIZE = 50;
-    private static final int TITLE_FONT_SIZE = 35;
-    private static final int MEDIUM_FONT_SIZE = 25;
-    private static final int LIGHT_FONT_SIZE = 20;
+    public static final int BIG_FONT_SIZE = 50;
+    public static final int TITLE_FONT_SIZE = 35;
+    public static final int MEDIUM_FONT_SIZE = 25;
+    public static final int LIGHT_FONT_SIZE = 20;
+
+    public static Font SansSerifFont(int fontSize) {
+        return new Font(Font.SANS_SERIF, Font.BOLD, fontSize);
+    }
 
     public static void BigFontStyle(JComponent component) {
-        component.setFont(new Font(Font.SANS_SERIF, Font.BOLD, BIG_FONT_SIZE));
+        component.setFont(SansSerifFont(BIG_FONT_SIZE));
     }
 
     public static void PlayerNameFontStyle(JComponent component) {
-        component.setFont(new Font(Font.SANS_SERIF, Font.BOLD, TITLE_FONT_SIZE));
+        component.setFont(SansSerifFont(TITLE_FONT_SIZE));
     }
 
     public static void MediumFontStyle(JComponent component) {
-        component.setFont(new Font(Font.SANS_SERIF, Font.BOLD, MEDIUM_FONT_SIZE));
+        component.setFont(SansSerifFont(MEDIUM_FONT_SIZE));
     }
 
     public static void LightFontStyle(JComponent component) {

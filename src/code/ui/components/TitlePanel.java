@@ -52,7 +52,7 @@ public class TitlePanel extends JPanel {
     }
 
     public void setTitle(String text) {
-        titleLabel.setText(text);
+        titleLabel.setText(text.toUpperCase());
     }
 
     private void setupShadow() {

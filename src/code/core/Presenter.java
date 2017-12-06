@@ -8,6 +8,10 @@ public class Presenter<V> {
         return view;
     }
 
+    public boolean hasView() {
+        return view != null;
+    }
+
     public void bindView(V view) {
         if (this.view != null) {
             throw new IllegalStateException("Presenter already has view!");

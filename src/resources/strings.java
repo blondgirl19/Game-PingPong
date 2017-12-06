@@ -30,7 +30,7 @@ public interface strings {
             "И пусть победит сильнейший из Вас!";
 
     //GAME SETTINGS
-    String GAME_PARAMS = "ПАРАМЕТРЫ ИГРЫ";
+    String GAME_PARAMS = "Параметры игры";
     String PLAYER_1 = "ИГРОК 1";
     String PLAYER_2 = "ИГРОК 2";
     String NAME = "Имя: ";
@@ -44,4 +44,9 @@ public interface strings {
 
     //GAME
     String SCORES_FORMAT = "%d : %d";
+    String PRESS_SPACE_TO_START = "Нажмите пробел для старта";
+    String GAME_END = "Конец игры";
+    String PLAYER_WIN_FORMAT = "Игрок \"%s\" победил!";
+    String PLAY_AGAIN = "Играть заново";
+    String PAUSE = "Пауза";
 }

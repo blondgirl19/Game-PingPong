@@ -48,16 +48,16 @@ public class ScoresPanel extends JPanel {
 
     public void incRightPlayerScore() {
         rightPlayerScores++;
-        repaintScores();
         checkGameEnd();
+        repaintScores();
     }
 
     private void checkGameEnd() {
         if (callback != null) {
             if (leftPlayerScores >= scoresToWin) {
-                callback.onPlayerWin(leftPlayer.getName());
+                callback.onPlayerWin(leftPlayer);
             } else if (rightPlayerScores >= scoresToWin) {
-                callback.onPlayerWin(rightPlayer.getName());
+                callback.onPlayerWin(rightPlayer);
             }
         }
     }
@@ -101,6 +101,6 @@ public class ScoresPanel extends JPanel {
     }
 
     public interface ScoresCallback {
-        void onPlayerWin(String playerName);
+        void onPlayerWin(Player winner);
     }
 }

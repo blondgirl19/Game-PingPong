@@ -3,8 +3,9 @@ package resources;
 import java.awt.event.KeyEvent;
 
 public interface constants {
-    int MIN_MAIN_FRAME_WIDTH = 900;
-    int MIN_MAIN_FRAME_HEIGHT = 550;
+    int MIN_FRAME_WIDTH = 900;
+    int MIN_FRAME_HEIGHT = 550;
+    int MIN_TABLE_PANEL_HEIGHT = 391;
 
     int TITLE_MARGINS = 7;
     int SHADOW_MARGINS = 2;
@@ -43,6 +44,15 @@ public interface constants {
     double DEFAULT_RACKET_STEP_PX = 6.6;
     double DEFAULT_BALL_STEP_IN_PX = 8.33;
     int DEFAULT_SCORES_TO_WIN = 3;
-    int DEFAULT_BAL_DIAMETER = 30;
+    int DEFAULT_BAL_DIAMETER = 18;
     int MILLIS_IN_ONE_SECOND = 1000;
+
+    int STATE_PAUSED = 1;
+    int STATE_TIMER = 2;
+    int STATE_NOTHING = 3;
+    int STATE_GAME = 4;
+    int STATE_GAME_ENDED = 5;
+
+    int TIMER_DELAY = 400;
+    int TIMER_TICKS = 3;
 }

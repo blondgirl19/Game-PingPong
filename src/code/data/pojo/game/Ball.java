@@ -1,6 +1,7 @@
 package code.data.pojo.game;
 
 import code.data.pojo.Point;
+import resources.colors;
 import resources.constants;
 
 import java.awt.*;
@@ -8,14 +9,12 @@ import java.awt.*;
 public class Ball implements Scalable {
     private BallCallback callback;
 
-    private double stepInPX;
     private double ballDiameter;
     private Point coordinates;
 
     private double stepByX, stepByY;
 
     public Ball(double stepInPX, double ballDiameter) {
-        this.stepInPX = stepInPX;
         this.stepByX = stepInPX;
         this.stepByY = stepInPX;
         this.ballDiameter = ballDiameter;
@@ -26,21 +25,21 @@ public class Ball implements Scalable {
         this.callback = callback;
     }
 
-    public void setStepInPX(double stepInPX) {
-        this.stepInPX = stepInPX;
-    }
-
     public void respawn(Point startCoordinates){
         coordinates = startCoordinates;
     }
 
     @Override
     public void onScreenResized(double scaleX, double scaleY) {
-        Double minScale = Math.min(scaleX, scaleY);
-        ballDiameter *= ballDiameter * minScale;
+        double avgScale = (scaleX + scaleY) / 2;
+
+        ballDiameter *= avgScale;
 
         coordinates.x *= scaleX;
         coordinates.y *= scaleY;
+
+        stepByX *= scaleX;
+        stepByY *= scaleY;
     }
 
     private void updateLocation(){
@@ -91,6 +90,7 @@ public class Ball implements Scalable {
     }
 
     public void repaint(Graphics g) {
+        g.setColor(colors.GREYISH_BROWN);
         g.fillOval((int)coordinates.x, (int)coordinates.y, (int) ballDiameter, (int) ballDiameter);
     }
 
@@ -100,6 +100,14 @@ public class Ball implements Scalable {
 
     public double getCenterY() {
         return coordinates.y - ballDiameter/2;
+    }
+
+    public double getBallDiameter() {
+        return ballDiameter;
+    }
+
+    public void setBallDiameter(double ballDiameter) {
+        this.ballDiameter = ballDiameter;
     }
 
     public interface BallCallback {

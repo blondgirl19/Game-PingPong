@@ -16,6 +16,8 @@ import resources.strings;
 import java.awt.*;
 import java.awt.event.*;
 
+import static resources.constants.*;
+
 public class GamePanel extends BasePanel implements GameContract.IGameView, TablePanel.PaintCallback, Ball.BallCallback, ScoresPanel.ScoresCallback {
     private GamePresenter presenter;
     private TablePanel tablePanel;
@@ -53,31 +55,44 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     protected void fillScreenContent() {
         screenContentPanel.setLayout(new BorderLayout());
         tablePanel = new TablePanel();
+        tablePanel.setTextToDraw(strings.PRESS_SPACE_TO_START);
         tablePanel.setCallback(this);
         screenContentPanel.add(tablePanel, BorderLayout.CENTER);
 
         presenter.loadGameParams();
         initScreenResizeListener();
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    presenter.onControlButtonClicked();
+                }
+            }
+        });
     }
 
     private void initScreenResizeListener() {
         tablePanel.addComponentListener(new ComponentAdapter() {
-            private Dimension previousDimension;
+            private Dimension previousDimension = new Dimension(MIN_FRAME_WIDTH, MIN_TABLE_PANEL_HEIGHT);
 
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 Dimension currentDimension = tablePanel.getDimension();
 
-                if (previousDimension != null && !previousDimension.equals(currentDimension)) {
+                if (!previousDimension.equals(currentDimension)) {
                     double scaleX = currentDimension.width / previousDimension.width;
                     double scaleY = currentDimension.height / previousDimension.height;
 
                     leftPlayer.onScreenResized(scaleX, scaleY);
                     rightPlayer.onScreenResized(scaleX, scaleY);
+                    ball.onScreenResized(scaleX, scaleY);
                 }
 
                 previousDimension = currentDimension;
+                tablePanel.repaint();
             }
         });
     }
@@ -105,10 +120,11 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
         scoresPanel.setCallback(this);
         screenContentPanel.add(scoresPanel, BorderLayout.SOUTH);
 
-        presenter.resumeGame();
+        respawnRackets();
+        respawnBall();
     }
 
-    private void initRacketsStartCoordinates() {
+    private void respawnRackets() {
         Racket leftRacket = leftPlayer.getRacket();
         double racketStartY = tablePanel.getHeight()/2 - leftRacket.getRacketSize().height/2;
 
@@ -126,7 +142,7 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
 
     @Override
     public void updateScreen() {
-        if (isGameComponentsInit()) {
+        if (isPanelInit()) {
             ball.update(leftPlayer.getRacket().getBounds(),
                     rightPlayer.getRacket().getBounds(),
                     tablePanel.getMinBallCoordinates(),
@@ -139,34 +155,52 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
         }
     }
 
-    private void checkGameComponentsInit() {
-        if (isTableInit()) {
-            if (!isGameComponentsInit()) {
-                initRacketsStartCoordinates();
-                respawnBall();
-                setFocusable(true);
-                requestFocusInWindow();
-            }
+    private void setupWindowListeners() {
+        if (isPanelInit()) {
+            setFocusable(true);
+            requestFocusInWindow();
         }
     }
 
-    private boolean isGameComponentsInit() {
-        boolean isRacketInit = leftPlayer.getRacket().isInitialized() && rightPlayer.getRacket().isInitialized();
-        return isRacketInit && ball != null && isTableInit();
+    private boolean isPanelInit() {
+        return getWidth() > 0 && getHeight() > 0;
     }
 
     @Override
     public void respawnBall() {
-        ball.respawn(tablePanel.getCenterPoint());
+        Point point = tablePanel.getCenterPoint();
+        point.x -= ball.getBallDiameter()/2;
+        point.y -= ball.getBallDiameter()/2;
+        ball.respawn(point);
     }
 
-    private boolean isTableInit() {
-        return tablePanel.getWidth() > 0 && tablePanel.getHeight() > 0;
+    @Override
+    public void onGameRestarted() {
+        respawnBall();
+        respawnRackets();
+        scoresPanel.refreshScores();
+        tablePanel.setTextToDraw(strings.PRESS_SPACE_TO_START);
+
+    }
+
+    @Override
+    public void onGamePaused() {
+        tablePanel.setTextToDraw(strings.PAUSE);
+    }
+
+    @Override
+    public void onGameResumed() {
+        tablePanel.clearTextToDraw();
+    }
+
+    @Override
+    public void onTimerTick(String time) {
+        tablePanel.setTextToDraw(time);
     }
 
     @Override
     public void onPaintComponent(Graphics g) {
-        checkGameComponentsInit();
+        setupWindowListeners();
 
         ball.repaint(g);
         leftPlayer.repaint(g);
@@ -186,16 +220,18 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     }
 
     @Override
-    public void onPlayerWin(String name) {
-        presenter.pauseGame();
-        showYesNoDialog("Конец игры",
-                "Игрок " + name + " победил",
-                "Играть заново",
-                "Параметры игры",
+    public void onPlayerWin(Player winner) {
+        presenter.endGame(winner);
+
+        showYesNoDialog(
+                strings.GAME_END,
+                String.format(strings.PLAYER_WIN_FORMAT, winner.getName()),
+                strings.PLAY_AGAIN,
+                strings.GAME_PARAMS,
                 new YesNoClickListener() {
                     @Override
                     public void onYesClicked() {
-
+                        presenter.restartGame();
                     }
 
                     @Override
