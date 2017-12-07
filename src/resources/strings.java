@@ -19,7 +19,9 @@ public interface strings {
     String ABOUT = "Об игре";
     String EXIT = "Выход";
 
-    String ABOUT_GAME_TEXT = "Игра была Анной Сабинской.\n" +
+    String ABOUT_GAME_TEXT = "Игра была написана студенткой\n" +
+            "ХНУ им. В.Н. Каразина, Анной Сабинской.\n" +
+            "В качестве курсовой работы на втором курсе.\n\n" +
             "Сотрудничество:\n" +
             "vk.com/anya_slabinskaya\n" +
             "ask.fm/Annyuta11\n\n" +
