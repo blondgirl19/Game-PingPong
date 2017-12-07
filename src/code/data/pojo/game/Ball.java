@@ -6,10 +6,12 @@ import resources.constants;
 
 import java.awt.*;
 
+import static resources.constants.UNDEFINED_DOUBLE;
+
 public class Ball implements Scalable {
     private BallCallback callback;
 
-    private double ballDiameter;
+    private double ballDiameter, nextCollideY;
     private Point coordinates;
 
     private double stepByX, stepByY;
@@ -19,6 +21,8 @@ public class Ball implements Scalable {
         this.stepByY = stepInPX;
         this.ballDiameter = ballDiameter;
         respawn(new Point(constants.UNDEFINED_INT, constants.UNDEFINED_INT));
+
+        nextCollideY = UNDEFINED_DOUBLE;
     }
 
     public void setCallback(BallCallback callback) {
@@ -49,39 +53,73 @@ public class Ball implements Scalable {
     public void update(Rectangle leftRacketBounds, Rectangle rightRacketBounds, Point minCoordinates, Point maxCoordinates) {
         updateLocation();
 
-        if (isOutOfLeft(minCoordinates.x) && callback != null) {
+        if (isOutOfLeft(coordinates.x,minCoordinates.x) && callback != null) {
+            resetNextCollide();
             stepByX = - stepByX;
             callback.onLeftPlayerGoal();
-        } else if (isOutOfRight(maxCoordinates.x) && callback != null){
+        } else if (isOutOfRight(coordinates.x,maxCoordinates.x) && callback != null){
+            resetNextCollide();
             stepByX = - stepByX;
             callback.onRightPlayerGoal();
-        } else if (isTopBottomCollide(minCoordinates.y, maxCoordinates.y)) {
+        } else if (isTopBottomCollide(coordinates.y, minCoordinates.y, maxCoordinates.y)) {
             stepByY = -stepByY; //change y moving direction
         } else if (leftRacketBounds.intersects(getBounds())) {
+            resetNextCollide();
             if (stepByX < 0) {
                 stepByX = -stepByX; // change x moving direction
             }
         } else if (rightRacketBounds.intersects(getBounds())) {
+            resetNextCollide();
             if (stepByX > 0) {
                 stepByX = - stepByX;
             }
         }
     }
 
+    private void resetNextCollide() {
+        nextCollideY = UNDEFINED_DOUBLE;
+    }
+
+    public double getNextOutOfBorderCoordinateY(Point minCoordinates, Point maxCoordinates) {
+        if (nextCollideY == UNDEFINED_DOUBLE) {
+            double stepX = stepByX;
+            double stepY = stepByY;
+            Point currentPoint = coordinates.clone();
+
+
+            while (true) {
+                currentPoint.x += stepX;
+                currentPoint.y += stepY;
+
+                if (isOutOfLeft(currentPoint.x, minCoordinates.x)) {
+                    break;
+                } else if (isOutOfRight(currentPoint.x, maxCoordinates.x)) {
+                    break;
+                } else if (isTopBottomCollide(currentPoint.y, minCoordinates.y, maxCoordinates.y)) {
+                    stepY = -stepY;
+                }
+            }
+
+            nextCollideY = currentPoint.y;
+        }
+
+        return nextCollideY;
+    }
+
     public Point getCenterCoordinates() {
         return new Point(getCenterX(), getCenterY());
     }
 
-    private boolean isOutOfRight(double x) {
-        return coordinates.x >= x + ballDiameter/2; // will out of right bound on half width
+    private boolean isOutOfRight(double ballX, double rightBorderX) {
+        return ballX >= rightBorderX + ballDiameter/2; // will out of right bound on half width
     }
 
-    private boolean isOutOfLeft(double x) {
-        return coordinates.x <= x - ballDiameter/2; // will out of left bound on half width
+    private boolean isOutOfLeft(double ballX, double leftBorderX) {
+        return ballX <= leftBorderX - ballDiameter/2; // will out of left bound on half width
     }
 
-    private boolean isTopBottomCollide(double minY, double maxY) {
-        return coordinates.y <= minY || coordinates.y >= maxY - ballDiameter;
+    private boolean isTopBottomCollide(double ballY, double minY, double maxY) {
+        return ballY <= minY || ballY >= maxY - ballDiameter;
     }
 
     public Rectangle getBounds() {

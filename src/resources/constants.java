@@ -35,18 +35,17 @@ public interface constants {
     int RIGHT_PLAYER_DOWN_CODE = KeyEvent.VK_DOWN;
 
     int UNDEFINED_INT = -1;
+    double UNDEFINED_DOUBLE = -1;
 
     int HUMAN = 1;
-    int COMPUTER_HARD = 4;
-    int COMPUTER_MEDIUM = 28;
-    int COMPUTER_EASY = 80;
+    int COMPUTER_HARD = 30;
+    int COMPUTER_MEDIUM = 60;
+    int COMPUTER_EASY = 100;
 
     int SIDE_LEFT = 1;
     int SIDE_RIGHT = 2;
 
-    int FPS_MIN_VALUE = 1;
     int DEFAULT_GAME_FPS = 60;
-    int FPS_MAX_VALUE = 300;
 
     int MIN_RACKET_STEP_PX = 1;
     double DEFAULT_RACKET_STEP_PX = 6.6;

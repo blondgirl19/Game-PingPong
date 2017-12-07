@@ -26,7 +26,6 @@ public class GameParamsPanel extends BaseBorderPanel {
     private ValuableSlider racketHeightSlider;
 
     private ValuableSlider scoresToWinSlider;
-    private ValuableSlider fpsSlider;
 
     public GameParamsPanel(GameParams lastParams) {
         super(colors.DARK_GRAY, strings.ANOTHER_PARAMS);
@@ -49,7 +48,6 @@ public class GameParamsPanel extends BaseBorderPanel {
         racketHeightSlider = createSlider(RACKETS_SIZE, MIN_RACKET_HEIGHT, MAX_RACKET_HEIGHT);
         racketSpeedSlider = createSlider(RACKETS_SPEED, MIN_RACKET_STEP_PX, MAX_RACKET_STEP_PX);
         scoresToWinSlider = createSlider(SCORES_TO_WIN, MIN_SCORES_TO_WIN, MAX_SCORES_TO_WIN);
-        fpsSlider = createSlider(GAME_FPS, FPS_MIN_VALUE, FPS_MAX_VALUE);
     }
 
     private void setStartValues() {
@@ -58,18 +56,12 @@ public class GameParamsPanel extends BaseBorderPanel {
         racketHeightSlider.setValue((int) lastParams.getRacketSize().height);
         racketSpeedSlider.setValue((int) lastParams.getRacketStep());
         scoresToWinSlider.setValue(lastParams.getScoresToWin());
-        fpsSlider.setValue(lastParams.getFps());
-    }
-
-    private void setupSpacing(JSlider slider, int minor, int major) {
-        slider.setMinorTickSpacing(minor);
-        slider.setMajorTickSpacing(major);
     }
 
     private void setupResetLabel() {
         JLabel resetLabel = new JLabel(strings.DEFAULT);
         styles.LightFontStyle(resetLabel);
-        resetLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        resetLabel.setHorizontalAlignment(SwingConstants.CENTER);
         styles.addForegroundClickListener(resetLabel, colors.GREYISH_BROWN, colors.BLUE);
 
         resetLabel.addMouseListener(new MouseAdapter() {
@@ -81,7 +73,6 @@ public class GameParamsPanel extends BaseBorderPanel {
             }
         });
 
-        screenContentPanel.add(new JLabel());
         screenContentPanel.add(resetLabel);
     }
 
@@ -96,7 +87,6 @@ public class GameParamsPanel extends BaseBorderPanel {
         GameParams gameParams = new GameParams();
         gameParams.setBallDiameter(ballDiameterSlider.getValue());
         gameParams.setBallStep(ballSpeedSlider.getValue());
-        gameParams.setFps(fpsSlider.getValue());
 
         Dimension racketSize = gameParams.getRacketSize();
         racketSize.setHeight(racketHeightSlider.getValue());

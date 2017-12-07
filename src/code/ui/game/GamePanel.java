@@ -148,8 +148,8 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
                     tablePanel.getMinBallCoordinates(),
                     tablePanel.getMaxBallCoordinates());
 
-            rightController.update(ball.getCenterCoordinates(), tablePanel.getDimension());
-            leftController.update(ball.getCenterCoordinates(), tablePanel.getDimension());
+            rightController.update(ball, tablePanel.getDimension(), tablePanel.getMinBallCoordinates(), tablePanel.getMaxBallCoordinates());
+            leftController.update(ball, tablePanel.getDimension(), tablePanel.getMinBallCoordinates(), tablePanel.getMaxBallCoordinates());
 
             tablePanel.repaint();
         }

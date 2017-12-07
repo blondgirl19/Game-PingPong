@@ -2,6 +2,7 @@ package code.data.pojo.controllers;
 
 import code.data.pojo.Dimension;
 import code.data.pojo.Point;
+import code.data.pojo.game.Ball;
 import code.data.pojo.game.Player;
 
 public abstract class PlayerController {
@@ -28,7 +29,7 @@ public abstract class PlayerController {
         isPause = false;
     }
 
-    public abstract void update(Point ballCoordinates, Dimension dimension);
+    public abstract void update(Ball ball, Dimension dimension, Point minCoordinates, Point maxCoordinates);
 
     public boolean isPlayerReady(){
         return player.getRacket().isInitialized();

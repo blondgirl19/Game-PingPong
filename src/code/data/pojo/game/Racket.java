@@ -38,7 +38,7 @@ public class Racket implements Scalable {
         }
     }
 
-    public void moveTowardsDirection(code.data.pojo.Dimension tableDimension) {
+    public void moveTowardsDirection(Dimension tableDimension) {
         double tableHeight = tableDimension.getHeight();
 
         if (isWithinTheScreen(tableHeight)) {

@@ -28,4 +28,8 @@ public class Point {
     public String toString() {
         return "X: " + x + ", Y: " + y;
     }
+
+    public Point clone() {
+        return new Point(x, y);
+    }
 }

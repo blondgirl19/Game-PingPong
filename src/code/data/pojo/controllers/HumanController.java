@@ -1,6 +1,7 @@
 package code.data.pojo.controllers;
 
 import code.data.pojo.Dimension;
+import code.data.pojo.game.Ball;
 import code.data.pojo.game.Player;
 import code.data.pojo.Point;
 import resources.constants;
@@ -48,7 +49,7 @@ public class HumanController extends PlayerController implements KeyListener{
     }
 
     @Override
-    public void update(Point ballCoordinates, Dimension dimension) {
+    public void update(Ball ball, Dimension dimension, Point minCoordinates, Point maxCoordinates) {
         player.update(dimension);
     }
 }
