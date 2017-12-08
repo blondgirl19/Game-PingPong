@@ -40,7 +40,7 @@ public interface strings {
     String PLAYER_TYPE = "Тип игрока: ";
     String COMPUTER = "Компьютер";
     String HUMAN = "Человек";
-    String HARD = "Сложный";
+    String HARD = "Сверхразум";
     String MEDIUM = "Средний";
     String EASY = "Простой";
     String DIFFICULT = "Сложность: ";

@@ -93,11 +93,13 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
     }
 
     @Override
-    public void onGoalEvent() {
-        view().respawnBall();
+    public void onGoalEvent(int goalSide) {
         isPause = true;
         if (gameState != STATE_GAME_ENDED) {
+            view().respawnBall(goalSide);
             runTimerThread();
+        } else {
+            view().respawnBall(SIDE_CENTER);
         }
     }
 

@@ -44,6 +44,7 @@ public class GameSettingsPanel extends BasePanel implements GameSettingsContract
         screenContentPanel.setLayout(new BorderLayout());
         scrollablePanel = new JPanel(new GridLayout(0, 1));
         JScrollPane scrollPane = new JScrollPane(scrollablePanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(SCROLLBAR_SPEED);
         screenContentPanel.add(scrollPane, BorderLayout.CENTER);
 
         presenter.loadParams();
@@ -107,4 +108,6 @@ public class GameSettingsPanel extends BasePanel implements GameSettingsContract
     public void onPlayersSaved() {
         gotoPanel(new GamePanel());
     }
+
+    private static final int SCROLLBAR_SPEED = 20;
 }

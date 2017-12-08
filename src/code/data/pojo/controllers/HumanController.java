@@ -30,9 +30,9 @@ public class HumanController extends PlayerController implements KeyListener{
             int keyCode = e.getKeyCode();
 
             if (keyCode == upKeyCode) {
-                player.setMoveDirection(constants.DIRECTION_UP);
+                player.setMoveState(constants.DIRECTION_UP);
             } else if (keyCode == downKeyCode) {
-                player.setMoveDirection(constants.DIRECTION_DOWN);
+                player.setMoveState(constants.DIRECTION_DOWN);
             }
         }
     }
@@ -43,7 +43,7 @@ public class HumanController extends PlayerController implements KeyListener{
             int keyCode = e.getKeyCode();
 
             if (keyCode == upKeyCode || keyCode == downKeyCode) {
-                player.setMoveDirection(constants.STOP_MOVING);
+                player.setMoveState(constants.STOP_MOVING);
             }
         }
     }

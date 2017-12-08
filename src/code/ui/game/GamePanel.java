@@ -121,7 +121,7 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
         screenContentPanel.add(scoresPanel, BorderLayout.SOUTH);
 
         respawnRackets();
-        respawnBall();
+        respawnBall(SIDE_CENTER);
     }
 
     private void respawnRackets() {
@@ -143,8 +143,8 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     @Override
     public void updateScreen() {
         if (isPanelInit()) {
-            ball.update(leftPlayer.getRacket().getBounds(),
-                    rightPlayer.getRacket().getBounds(),
+            ball.update(leftPlayer.getRacket(),
+                    rightPlayer.getRacket(),
                     tablePanel.getMinBallCoordinates(),
                     tablePanel.getMaxBallCoordinates());
 
@@ -167,8 +167,31 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     }
 
     @Override
-    public void respawnBall() {
-        Point point = tablePanel.getCenterPoint();
+    public void respawnBall(int side) {
+        Point point;
+        switch (side) {
+            case SIDE_LEFT:
+                Racket leftRacket = leftPlayer.getRacket();
+                double leftX = leftRacket.getRacketCenterX();
+                leftX = leftX + leftRacket.getRacketSize().width/2 + ball.getBallDiameter();
+                double leftY = leftRacket.getRacketCenterY();
+
+                point = new Point(leftX, leftY);
+                break;
+            case SIDE_RIGHT:
+                Racket rightRacket = rightPlayer.getRacket();
+                double rightX = rightRacket.getRacketCenterX();
+                rightX = rightX - rightRacket.getRacketSize().width/2 - ball.getBallDiameter();
+                double rightY = rightRacket.getRacketCenterY();
+
+                point = new Point(rightX, rightY);
+                break;
+            case SIDE_CENTER:
+            default:
+                point = tablePanel.getCenterPoint();
+                break;
+        }
+
         point.x -= ball.getBallDiameter()/2;
         point.y -= ball.getBallDiameter()/2;
         ball.respawn(point);
@@ -176,7 +199,7 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
 
     @Override
     public void onGameRestarted() {
-        respawnBall();
+        respawnBall(SIDE_CENTER);
         respawnRackets();
         scoresPanel.refreshScores();
         tablePanel.setTextToDraw(strings.PRESS_SPACE_TO_START);
@@ -209,13 +232,13 @@ public class GamePanel extends BasePanel implements GameContract.IGameView, Tabl
     @Override
     public void onLeftPlayerGoal() {
         scoresPanel.incRightPlayerScore();
-        presenter.onGoalEvent();
+        presenter.onGoalEvent(SIDE_LEFT);
     }
 
     @Override
     public void onRightPlayerGoal() {
         scoresPanel.incLeftPlayerScores();
-        presenter.onGoalEvent();
+        presenter.onGoalEvent(SIDE_RIGHT);
     }
 
     @Override

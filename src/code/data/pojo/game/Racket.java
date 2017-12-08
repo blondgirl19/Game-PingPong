@@ -11,7 +11,7 @@ import java.awt.*;
 import static resources.constants.*;
 
 public class Racket implements Scalable {
-    private int moveDirection;
+    private int moveState;
     private Dimension racketSize;
     private Point coordinates;
     private double oneStepInPX;
@@ -20,15 +20,15 @@ public class Racket implements Scalable {
         this.coordinates = new Point(UNDEFINED_INT, UNDEFINED_INT);
         this.racketSize = racketSize;
         this.oneStepInPX = oneStepInPX;
-        this.moveDirection = STOP_MOVING;
+        this.moveState = STOP_MOVING;
     }
 
-    public void setMoveDirection(int direction) {
-        this.moveDirection = direction;
+    public void setMoveState(int direction) {
+        this.moveState = direction;
     }
 
     private double getCurrentStep() {
-        switch (moveDirection) {
+        switch (moveState) {
             case DIRECTION_UP:
                 return -oneStepInPX;
             case DIRECTION_DOWN:
@@ -43,9 +43,9 @@ public class Racket implements Scalable {
 
         if (isWithinTheScreen(tableHeight)) {
             coordinates.y += getCurrentStep();
-        } else if (isHitTop() && moveDirection == DIRECTION_DOWN) {
+        } else if (isHitTop() && moveState == DIRECTION_DOWN) {
             coordinates.y += oneStepInPX;
-        } else if (isHitBottom(tableHeight) && moveDirection == DIRECTION_UP) {
+        } else if (isHitBottom(tableHeight) && moveState == DIRECTION_UP) {
             coordinates.y -= oneStepInPX;
         }
     }
@@ -114,5 +114,9 @@ public class Racket implements Scalable {
 
     public double getRacketCenterX() {
         return coordinates.x + racketSize.width/2;
+    }
+
+    public int getMoveState() {
+        return moveState;
     }
 }

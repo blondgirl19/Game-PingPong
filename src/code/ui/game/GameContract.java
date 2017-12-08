@@ -8,7 +8,7 @@ public interface GameContract {
     interface IGameView {
         void onGameParamsLoaded(PlayerController leftController, PlayerController rightController, Ball ball, int scoresToWin);
         void updateScreen();
-        void respawnBall();
+        void respawnBall(int side);
         void onGameRestarted();
         void onGamePaused();
         void onGameResumed();
@@ -18,7 +18,7 @@ public interface GameContract {
     interface IGamePresenter {
         void loadGameParams();
         void exitGame();
-        void onGoalEvent();
+        void onGoalEvent(int side);
         void onControlButtonClicked();
         void restartGame();
         void endGame(Player winner);

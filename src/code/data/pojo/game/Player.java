@@ -64,8 +64,8 @@ public class Player {
         this.racketColor = racketColor;
     }
 
-    public void setMoveDirection(int direction) {
-        racket.setMoveDirection(direction);
+    public void setMoveState(int direction) {
+        racket.setMoveState(direction);
     }
 
     public void repaint(Graphics g) {
