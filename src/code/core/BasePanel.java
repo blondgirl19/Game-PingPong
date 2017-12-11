@@ -54,7 +54,7 @@ public abstract class BasePanel extends JPanel {
                 this,
                 text,
                 title,
-                JOptionPane.OK_OPTION,
+                JOptionPane.YES_NO_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
                 null,
                 options,

@@ -62,7 +62,7 @@ public class Racket implements Scalable {
         return coordinates.y + racketSize.height >= tableHeight;
     }
 
-    public code.data.pojo.Point getCoordinates() {
+    public Point getCoordinates() {
         return coordinates;
     }
 
@@ -83,10 +83,6 @@ public class Racket implements Scalable {
 
     public Dimension getRacketSize() {
         return racketSize;
-    }
-
-    public void setRacketSize(code.data.pojo.Dimension racketSize) {
-        this.racketSize = racketSize;
     }
 
     public boolean isInitialized() {

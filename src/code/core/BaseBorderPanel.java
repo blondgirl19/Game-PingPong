@@ -8,7 +8,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-public abstract class BaseBorderPanel extends JPanel {
+public class BaseBorderPanel extends JPanel {
     protected Color borderColor;
     protected JPanel screenContentPanel;
 
@@ -51,6 +51,4 @@ public abstract class BaseBorderPanel extends JPanel {
         titlePanel.add(divider, BorderLayout.SOUTH);
         add(titlePanel, BorderLayout.NORTH);
     }
-
-    protected abstract void initScreenContent();
 }

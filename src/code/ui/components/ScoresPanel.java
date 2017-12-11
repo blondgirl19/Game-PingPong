@@ -9,6 +9,8 @@ import resources.styles;
 import javax.swing.*;
 import java.awt.*;
 
+import static resources.strings.*;
+
 public class ScoresPanel extends JPanel {
     private Player leftPlayer, rightPlayer;
     private int leftPlayerScores, rightPlayerScores;
@@ -18,17 +20,20 @@ public class ScoresPanel extends JPanel {
 
     public ScoresPanel(Player leftPlayer, Player rightPlayer, int scoresToWin) {
         this.scoresToWin = scoresToWin;
-
         this.leftPlayer = leftPlayer;
         this.rightPlayer = rightPlayer;
+
+        initPanel();
+        refreshScores();
+        setupDivider();
+    }
+
+    private void initPanel() {
         setOpaque(true);
 
         setLayout(new BorderLayout());
         setBackground(colors.WHITE);
         initLabels();
-
-        refreshScores();
-        setupDivider();
     }
 
     public void setCallback(ScoresCallback callback) {
@@ -72,25 +77,56 @@ public class ScoresPanel extends JPanel {
         JPanel labelsPanel = new JPanel(new GridLayout(1, 3));
         labelsPanel.setOpaque(false);
 
-        JLabel leftPlayerLabel = new JLabel(leftPlayer.getName());
-        setupLabel(leftPlayerLabel);
-        labelsPanel.add(leftPlayerLabel);
 
-        scoresLabel = new JLabel();
-        setupLabel(scoresLabel);
-        styles.BigFontStyle(scoresLabel);
+        JLabel leftPlayerLabel = createBigLabel(leftPlayer.getName());
+        JPanel leftPlayerPanel = createPlayerPanel(leftPlayerLabel, leftPlayer.getType());
+        labelsPanel.add(leftPlayerPanel);
+
+        scoresLabel = createBigLabel("");
         labelsPanel.add(scoresLabel);
 
-        JLabel rightPlayerLabel = new JLabel(rightPlayer.getName());
-        setupLabel(rightPlayerLabel);
-        labelsPanel.add(rightPlayerLabel);
+        JLabel rightPlayerLabel = createBigLabel(rightPlayer.getName());
+        JPanel rightPlayerPanel = createPlayerPanel(rightPlayerLabel, rightPlayer.getType());
+        labelsPanel.add(rightPlayerPanel);
 
         add(labelsPanel, BorderLayout.CENTER);
     }
 
-    private void setupLabel(JLabel label) {
+    private JPanel createPlayerPanel(JLabel playerLabel, int playerType) {
+        JPanel leftPlayerPanel = new JPanel(new BorderLayout());
+        leftPlayerPanel.setOpaque(false);
+
+        String typeString;
+        switch (playerType) {
+            case constants.COMPUTER_HARD:
+                typeString = HARD + " " + COMPUTER.toLowerCase();
+                break;
+            case constants.COMPUTER_MEDIUM:
+                typeString = MEDIUM + " " + COMPUTER.toLowerCase();
+                break;
+            case constants.COMPUTER_EASY:
+                typeString = EASY + " " + COMPUTER.toLowerCase();
+                break;
+            default:
+                typeString = HUMAN;
+                break;
+        }
+        JLabel playerTypeLabel = new JLabel(typeString);
+        styles.LightTextStyle(playerTypeLabel);
+        playerTypeLabel.setForeground(colors.SHADOW);
+        leftPlayerPanel.add(playerTypeLabel, BorderLayout.SOUTH);
+
+        leftPlayerPanel.add(playerLabel, BorderLayout.CENTER);
+
+        return leftPlayerPanel;
+    }
+
+    private JLabel createBigLabel(String text) {
+        JLabel label = new JLabel(text);
         styles.PlayerNameFontStyle(label);
         label.setHorizontalAlignment(SwingConstants.CENTER);
+
+        return label;
     }
 
     private void setupDivider() {

@@ -61,9 +61,9 @@ public class GameSettingsPanel extends BasePanel implements GameSettingsContract
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseClicked(e);
-                if (leftPlayerPanel.checkIsDataValid() && rightPlayerPanel.checkIsDataValid()) {
-                    Player leftPlayer = leftPlayerPanel.getPlayer();
-                    Player rightPlayer = rightPlayerPanel.getPlayer();
+                if (leftPlayerPanel.isNameEntered() && rightPlayerPanel.isNameEntered()) {
+                    Player leftPlayer = leftPlayerPanel.createPlayer();
+                    Player rightPlayer = rightPlayerPanel.createPlayer();
                     GameParams gameParams = paramsPanel.getGameParams();
 
                     presenter.saveGameParams(leftPlayer, rightPlayer, gameParams);

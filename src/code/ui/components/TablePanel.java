@@ -62,7 +62,7 @@ public class TablePanel extends JPanel {
         if (textToDraw != null && !textToDraw.isEmpty()) {
             if (textToDraw.length() < 2) { // timer
                 g.setColor(colors.ORANGE);
-                g.setFont(styles.SansSerifFont(styles.BIG_FONT_SIZE));
+                g.setFont(styles.SansSerifFont(styles.TIMER_FONT_SIZE));
             } else {
                 g.setColor(colors.SHADOW);
                 g.setFont(styles.SansSerifFont(styles.MEDIUM_FONT_SIZE));

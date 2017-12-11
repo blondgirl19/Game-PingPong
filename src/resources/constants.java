@@ -68,7 +68,6 @@ public interface constants {
 
     int STATE_PAUSED = 1;
     int STATE_TIMER = 2;
-    int STATE_NOTHING = 3;
     int STATE_GAME = 4;
     int STATE_GAME_ENDED = 5;
 
@@ -79,4 +78,7 @@ public interface constants {
     double PERCENT_102 = 1.02;
     double PERCENT_105 = 1.05;
     double PERCENT_10 = 0.1;
+
+    int POSITIVE = 1;
+    int NEGATIVE = -1;
 }

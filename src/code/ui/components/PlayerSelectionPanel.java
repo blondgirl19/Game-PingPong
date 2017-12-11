@@ -27,7 +27,6 @@ public class PlayerSelectionPanel extends BaseBorderPanel {
         initScreenContent();
     }
 
-    @Override
     protected void initScreenContent() {
         screenContentPanel.setLayout(new GridLayout(0, 2, 0, constants.LIST_ITEMS_SPACING));
 
@@ -36,7 +35,7 @@ public class PlayerSelectionPanel extends BaseBorderPanel {
         initPlayerTypeSelection(previousPlayer.isHuman());
         initComputerDifficultSelection(previousPlayer.getType());
 
-        onPlayerSelected(!previousPlayer.isHuman());
+        setComputerDifficultVisible(!previousPlayer.isHuman());
     }
 
     private void initNameInput(String previousName) {
@@ -69,12 +68,8 @@ public class PlayerSelectionPanel extends BaseBorderPanel {
         playersCompoBox.addActionListener(e -> {
             JComboBox jComboBox = (JComboBox) e.getSource();
             String playerType = (String) jComboBox.getSelectedItem();
-            onPlayerSelected(!playerType.equals(strings.HUMAN));
+            setComputerDifficultVisible(!playerType.equals(strings.HUMAN));
         });
-    }
-
-    private void onPlayerSelected(boolean isHuman) {
-        setComputerDifficultVisible(isHuman);
     }
 
     private void setComputerDifficultVisible(boolean isVisible) {
@@ -134,29 +129,28 @@ public class PlayerSelectionPanel extends BaseBorderPanel {
         return label;
     }
 
-    public boolean checkIsDataValid() {
+    public boolean isNameEntered() {
         String name = getPlayerName();
         return !name.isEmpty();
     }
 
-    public Player getPlayer() {
+    public Player createPlayer() {
         String playerName = getPlayerName();
         String type = (String) playersCompoBox.getSelectedItem();
 
-        if (type != null) {
-            switch (type) {
-                case strings.COMPUTER:
-                    return new Player(playerName, getComputerDifficult(), previousPlayer.getSide(), colorPickerButton.getBackground());
-                case strings.HUMAN:
-                    return new Player(playerName, constants.HUMAN, previousPlayer.getSide(), colorPickerButton.getBackground());
-            }
+        int typeInt;
+        if (type.equals(strings.COMPUTER)) {
+            typeInt = getComputerDifficult();
+        } else {
+            typeInt = constants.HUMAN;
         }
 
-        return null;
+        return new Player(playerName, typeInt, previousPlayer.getSide(), colorPickerButton.getBackground());
     }
 
     private int getComputerDifficult() {
         String difficultString = (String) difficultComboBox.getSelectedItem();
+
         if (difficultString != null) {
             switch (difficultString) {
                 case strings.EASY:

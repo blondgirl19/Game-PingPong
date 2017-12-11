@@ -10,17 +10,13 @@ import resources.constants;
 import static resources.constants.*;
 
 public class ComputerController extends PlayerController {
-    private int delaysToUpdate;
-    private int updateDelayCounter;
     private double viewRange;
     private double targetY;
 
     public ComputerController(Player player) {
         super(player);
 
-        this.delaysToUpdate = player.getType();
-        this.updateDelayCounter = 0;
-        viewRange = player.getType() / constants.RANGE_DIVIDER;
+        viewRange = (double) player.getType() / (double) constants.RANGE_DIVIDER;
     }
 
     @Override

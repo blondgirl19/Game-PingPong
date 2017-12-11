@@ -17,7 +17,6 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
     private int gameState;
 
     public GamePresenter() {
-        gameState = STATE_NOTHING;
         inMemoryStore = new InMemoryStore();
         setupRunnable();
     }
@@ -128,7 +127,6 @@ public class GamePresenter extends Presenter<GameContract.IGameView> implements 
     @Override
     public void onControlButtonClicked() {
         switch (gameState) {
-            case STATE_NOTHING:
             case STATE_GAME_ENDED:
             case STATE_PAUSED:
                 resumeGame();

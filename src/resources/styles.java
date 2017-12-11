@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 
 public class styles {
     public static final int BIG_FONT_SIZE = 50;
+    public static final int TIMER_FONT_SIZE = 65;
     public static final int TITLE_FONT_SIZE = 35;
     public static final int MEDIUM_FONT_SIZE = 25;
     public static final int LIGHT_FONT_SIZE = 20;

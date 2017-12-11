@@ -34,7 +34,6 @@ public class GameParamsPanel extends BaseBorderPanel {
         initScreenContent();
     }
 
-    @Override
     protected void initScreenContent() {
         screenContentPanel.setLayout(new GridLayout(0, COMPONENTS_IN_ROW, constants.TITLE_MARGINS, constants.TITLE_MARGINS));
         createSliders();

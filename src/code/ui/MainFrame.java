@@ -31,15 +31,4 @@ public class MainFrame extends JFrame {
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
     }
-
-    /*
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-                e.getComponent().getWidth();
-                e.getComponent().getHeight();
-            }
-        });
-     */
 }
